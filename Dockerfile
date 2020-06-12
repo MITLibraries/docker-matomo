@@ -1,15 +1,7 @@
-FROM matomo
-
-EXPOSE 80 443
+FROM matomo:latest
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y unzip
+RUN apt-get update && apt-get upgrade -y 
 
-VOLUME /var/www/html
-
-# Allow to write in tmp directory
-RUN 
-
-# Copy Matomo configuration
-COPY config.ini.php /var/www/html/config/config.ini.php
+EXPOSE 80 443
 
