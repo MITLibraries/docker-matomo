@@ -11,6 +11,19 @@ tables_prefix = "matomo_"
 proxy_client_headers[] = "HTTP_X_FORWARDED_FOR"
 salt = "$SALT"
 trusted_hosts[] = "$TRUSTED_HOSTS"
+login_password_recovery_email_address = $SMTP_NOREPLY_ADDRESS
+login_password_recovery_replyto_email_address = $SMTP_NOREPLY_ADDRESS
+noreply_email_address = $SMTP_NOREPLY_ADDRESS
+noreply_email_name = "Matomo"
+
+[mail]
+transport = "smtp"
+port = $SMTP_PORT
+host = $SMTP_HOST
+type = $SMTP_AUTH_TYPE
+username = $SMTP_USER
+password = $SMTP_PASSWORD
+encryption = "tls"
 
 [PluginsInstalled]
 PluginsInstalled[] = "Diagnostics"
