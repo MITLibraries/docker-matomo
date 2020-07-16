@@ -22,9 +22,6 @@ publish: ## Promote the current staging build to production
 	docker pull $(ECR_REGISTRY)/analytics-stage:latest
 	docker tag $(ECR_REGISTRY)/analytics-stage:latest $(ECR_REGISTRY)/analytics-prod:latest
 	docker tag $(ECR_REGISTRY)/analytics-stage:latest $(ECR_REGISTRY)/analytics-prod:$(DATETIME)
-		
-promote:
-	$$(aws ecr get-login --no-include-email --region us-east-1)
 	docker push $(ECR_REGISTRY)/analytics-prod:latest
 	docker push $(ECR_REGISTRY)/analytics-prod:$(DATETIME)
 	aws ecs update-service --cluster analytics-prod-cluster --service analytics-prod --region us-east-1 --force-new-deployment
