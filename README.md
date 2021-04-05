@@ -1,6 +1,6 @@
 # Search Analytics (Matomo)
 
-This repository supports MIT Libraries' implementation of (Matomo)[https://matomo.org/],
+This repository supports MIT Libraries' implementation of [Matomo](https://matomo.org/),
 which we use to collect discovery analytics. Our implementation uses the Docker
 container provided by Matomo. We host the application in AWS Fargate.
 
@@ -13,7 +13,7 @@ Run `make build` to create a new container tagged as `analytics-stage:latest`.
 Run `make dist` to build, tag, and push a container to staging. To promote to
 production, run `make publish`.
 
-Please see the corresponding (Terraform module)[https://github.com/MITLibraries/mitlib-terraform/tree/master/apps/analytics] for deployment config.
+Please see the corresponding [Terraform module](https://github.com/MITLibraries/mitlib-terraform/tree/master/apps/analytics) for deployment config.
 
 ## URLs
 
@@ -76,3 +76,10 @@ permissions level.
 Matomo has built-in two-factor authentication, which we enforce for all accounts.
 When a user logs in to Matomo for the first time, they will be prompted to
 configure 2FA. At this time, we are recommending Duo as an authenticator.
+
+## Additional documentation
+
+* [MIT Libraries dev docs](https://mitlibraries.github.io/guides/misc/matomo.html) - includes 
+information about setting up a website for tracking in Matomo.
+* [Matomo help center](https://matomo.org/help/) - offical Matomo docs. 
+Includes user guide, developer guide, FAQ, and community support forum.
