@@ -1,27 +1,37 @@
-.PHONY: help dist publish promote
+.PHONY: help dist-dev publish-dev dist-stage publish-stage
 SHELL=/bin/bash
-ECR_REGISTRY=672626379771.dkr.ecr.us-east-1.amazonaws.com
-DATETIME:=$(shell date -u +%Y%m%dT%H%M%SZ)
+### This is the Terraform-generated header for matomo-dev ###
+ECR_NAME_DEV:=matomo-dev
+ECR_URL_DEV:=222053980223.dkr.ecr.us-east-1.amazonaws.com/matomo-dev
+### End of Terraform-generated header ###
 
 help: ## Print this message
 	@awk 'BEGIN { FS = ":.*##"; print "Usage:  make <target>\n\nTargets:" } \
 		/^[-_[:alpha:]]+:.?*##/ { printf "  %-15s%s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
-build: ## Build docker image
-	docker build -t $(ECR_REGISTRY)/analytics-stage:latest \
-	-t analytics-stage:latest .
-	
-		
-dist: dist ## Build, tag and push
-	$$(aws ecr get-login --no-include-email --region us-east-1)
-	docker push $(ECR_REGISTRY)/analytics-stage:latest
-	aws ecs update-service --cluster analytics-stage-cluster --service analytics-stage --region us-east-1 --force-new-deployment
+### Terraform-generated Developer Deploy Commands for Dev environment ###
+dist-dev: ## Build docker container (intended for developer-based manual build)
+	docker build --platform linux/amd64 \
+	    -t $(ECR_URL_DEV):latest \
+		-t $(ECR_URL_DEV):`git describe --always` \
+		-t $(ECR_NAME_DEV):latest .
 
-publish: ## Promote the current staging build to production
-	$$(aws ecr get-login --no-include-email --region us-east-1)
-	docker pull $(ECR_REGISTRY)/analytics-stage:latest
-	docker tag $(ECR_REGISTRY)/analytics-stage:latest $(ECR_REGISTRY)/analytics-prod:latest
-	docker tag $(ECR_REGISTRY)/analytics-stage:latest $(ECR_REGISTRY)/analytics-prod:$(DATETIME)
-	docker push $(ECR_REGISTRY)/analytics-prod:latest
-	docker push $(ECR_REGISTRY)/analytics-prod:$(DATETIME)
-	aws ecs update-service --cluster analytics-prod-cluster --service analytics-prod --region us-east-1 --force-new-deployment
+publish-dev: dist-dev ## Build, tag and push (intended for developer-based manual publish)
+	docker login -u AWS -p $$(aws ecr get-login-password --region us-east-1) $(ECR_URL_DEV)
+	docker push $(ECR_URL_DEV):latest
+	docker push $(ECR_URL_DEV):`git describe --always`
+
+### Terraform-generated manual shortcuts for deploying to Stage ###
+### This requires that ECR_NAME_STAGE & ECR_URL_STAGE environment variables are set locally
+### by the developer and that the developer has authenticated to the correct AWS Account.
+### The values for the environment variables can be found in the stage_build.yml caller workflow.
+dist-stage: ## Only use in an emergency
+	docker build --platform linux/amd64 \
+	    -t $(ECR_URL_STAGE):latest \
+		-t $(ECR_URL_STAGE):`git describe --always` \
+		-t $(ECR_NAME_STAGE):latest .
+
+publish-stage: ## Only use in an emergency
+	docker login -u AWS -p $$(aws ecr get-login-password --region us-east-1) $(ECR_URL_STAGE)
+	docker push $(ECR_URL_STAGE):latest
+	docker push $(ECR_URL_STAGE):`git describe --always`

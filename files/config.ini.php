@@ -1,29 +1,35 @@
 ; <?php exit; ?> DO NOT REMOVE THIS LINE
 ; file automatically generated or modified by Matomo; you can manually override the default values in global.ini.php by redefining them in this file.
 [database]
-host = "$MATOMO_DATABASE_HOST"
-username = "$MYSQL_USER"
-password = "$MYSQL_PASSWORD"
-dbname = "matomo"
-tables_prefix = "matomo_"
 
 [General]
 proxy_client_headers[] = "HTTP_X_FORWARDED_FOR"
-salt = "$SALT"
-trusted_hosts[] = "$TRUSTED_HOSTS"
-login_password_recovery_email_address = $SMTP_NOREPLY_ADDRESS
-login_password_recovery_replyto_email_address = $SMTP_NOREPLY_ADDRESS
-noreply_email_address = $SMTP_NOREPLY_ADDRESS
-noreply_email_name = "Matomo"
+
+; maximum number of rows for any of the Referers tables (keywords, search engines, campaigns, etc.), and Custom variables names
+datatable_archiving_maximum_rows_referrers = 5000
+
+; maximum number of rows for any of the Referers subtable (search engines by keyword, keyword by campaign, etc.), and Custom variables values
+datatable_archiving_maximum_rows_subtable_referrers = 5000
+
+; maximum number of rows for any of the Actions tables (pages, downloads, outlinks)
+datatable_archiving_maximum_rows_actions = 5000
+
+; maximum number of rows for pages in categories (sub pages, when clicking on the + for a page category)
+datatable_archiving_maximum_rows_subtable_actions = 5000
+
+; maximum number of rows for any of the Events tables (Categories, Actions, Names)
+datatable_archiving_maximum_rows_events = 5000
+
+; maximum number of rows for sub-tables of the Events tables (eg. for the subtables Categories>Actions or Categories>Names).
+datatable_archiving_maximum_rows_subtable_events = 100
+
+; maximum number of rows for the Site Search table
+ datatable_archiving_maximum_rows_site_search = 5000
+
+; maximum number of rows for the User ID report
+datatable_archiving_maximum_rows_userid_users = 5000
 
 [mail]
-transport = "smtp"
-port = $SMTP_PORT
-host = $SMTP_HOST
-type = $SMTP_AUTH_TYPE
-username = $SMTP_USER
-password = $SMTP_PASSWORD
-encryption = "tls"
 
 [Plugins]
 Plugins[] = "CorePluginsAdmin"
@@ -83,6 +89,7 @@ Plugins[] = "CustomPiwikJs"
 Plugins[] = "Tour"
 Plugins[] = "MobileAppMeasurable"
 Plugins[] = "Provider"
+Plugins[] = "EnvironmentVariables"
 
 [PluginsInstalled]
 PluginsInstalled[] = "Diagnostics"
@@ -143,6 +150,6 @@ PluginsInstalled[] = "DevicePlugins"
 PluginsInstalled[] = "Heartbeat"
 PluginsInstalled[] = "Marketplace"
 PluginsInstalled[] = "ProfessionalServices"
-PluginsInstalled[] = "UserId"
 PluginsInstalled[] = "CustomPiwikJs"
 PluginsInstalled[] = "Tour"
+PluginsInstalled[] = "EnvironmentVariables"
