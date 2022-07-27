@@ -13,7 +13,7 @@ The container-based Matomo installation requires a walk through of the web UI to
 1. Log back in to the web UI as the super user, navigate to the Settings/Plugins page and **Activate** the EnvironmentVariables plugin. This will update the remaining settings.
 1. In the Settings/Plugins, **deactivate** the UserID plugin (see **Data anonymization**  in the [README.md](../README.md)).
 
-## WIP: Restore from Backup
+## Restore from Backup
 
 Most of this is documented in the [Matomo documentation](https://matomo.org/faq/how-to/how-do-i-backup-and-restore-the-matomo-data/). Their instructions rely on `mysqldump`. The details below are specific to MIT Libraries and AWS RDS backups/snapshots.
 
@@ -51,12 +51,14 @@ This generally follows the [Matomo documentation](https://matomo.org/faq/how-to/
 
 The general migration plan is
 
-1. In Legacy AWS, use `mysqldump` to export the database.
+1. Run a clean deploy of the [mitlib-tf-workloads-matomo](https://github.com/MITLibraries/mitlib-tf-workloads-matomo) resources in the AWS Org account (Dev1 or Stage-Workloads or Prod-Workloads)
+1. Start the special EC2 instance in the account (Dev1 or Stage-Workloads or Prod-Workloads).
+1. In Legacy AWS, use `mysqldump` to export the database (using the special EFS-access EC2 instance)
 1. Copy the export file to Dev1 in AWS Org.
-1. In Dev1, use `mysql` CLI to load export file into existing DB instance.
+1. In Dev1, use `mysql` CLI to load export file into existing DB instance (using the special EC2 instance)
 1. Restart the Matomo ECS service.
 
-Before getting started, make sure that you have access to the `root` password for the RDS instance in legacy AWS (needed for the `mysqldump` command) and the `matomo` password for the RDS instance in Dev1 (needed for the `mysql` command).
+Before getting started, make sure that you have access to the `root` password for the RDS instance in legacy AWS (needed for the `mysqldump` command) and the `matomo` password for the RDS instance in Dev1/Stage-Workloads/Prod-Workloads (needed for the `mysql` command).
 
 ### Legacy AWS
 
@@ -74,7 +76,7 @@ To capture the RDS_ENDPOINT for the database, run the following command:
 aws rds describe-db-instances --filters "Name=db-instance-id,Values=analytics-<env>" --query "DBInstances[*].Endpoint.Address" --output text
 ```
 
-To connect to the instance, run the following command:
+To connect to the instance, run the following command (the value for `--target` is the output from the `aws ec2` command above)
 
 ```bash
 aws ssm start-session --target i-xxxxxxxxxxxxxxxxx
@@ -89,11 +91,12 @@ mysqldump -h <RDS_ENDPOINT> -P 3306 -u root -p --single-transaction --set-gtid-p
 tar zcf <env>-matomo-mysql-database-$(date +%Y-%m-%d-%H.%M.%S).sql.tar.gz <env>-matomo-mysql5734.sql
 ```
 
-Then, authenticate to the target AWS Account (easiest to do w/ copy/paste of credentials from AWS SSO) and copy it to Dev1 EC2 instance):
+Then, authenticate to the target AWS Account (easiest to do with copy/paste of credentials from AWS SSO) and copy it to Dev1 EC2 instance):
 
 ```bash
 <authenticate to target AWS Account>
-scp -i ~/.ssh/dev1_ec2.priv <env>-matomo-mysql-database-<DATETIMESTAMP>.sql.tar.gz ubuntu@i-yyyyyyyyyyyyyyyyy:~/<env>-matomo-mysql-database-<DATETIMESTAMP>.sql.tar.gz
+aws ec2 describe-instances --filters "Name=tag:Name,Values=Matomo-efs-mgmt" --query "Reservations[*].Instances[*].[InstanceId]" --output text
+scp -i ~/.ssh/dev1_ec2.private <env>-matomo-mysql-database-<DATETIMESTAMP>.sql.tar.gz ubuntu@i-yyyyyyyyyyyyyyyyy:~/<env>-matomo-mysql-database-<DATETIMESTAMP>.sql.tar.gz
 exit
 exit
 ```
@@ -130,7 +133,7 @@ exit
 exit
 ```
 
-Once the database is loaded, wait for the Matomo instance to stabilize. Then, log in to the Matomo web UI and verify that all is well.
+Once the database is loaded, log in to the Matomo web UI and verify that all is well.
 
 ## WIP: Troubleshooting
 

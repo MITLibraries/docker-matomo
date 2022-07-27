@@ -24,11 +24,11 @@ For detailed instructions on initial setup, migration, database upgrades, and ap
 "State" for Matomo is managed/stored in at most two locations:
 
 * the `config.ini.php` file
-* the database
+* the MySQL database
 
 The `config.ini.php` file contains some core Matomo configuration. There are a couple of sections worth addressing:
 
-1. The `[Plugins]` section tells Matomo which plugins to enable on installation. To disable a plugin, simply remove it from this section. Our preference is to modify this section and not the `PluginsInstalled` section, as removing a plugin from `PluginsInstalled` would remove it from the application completely. Sadly, with the container-based Matomo, it seems to only way to activate a plugin is to use the Matomo web UI.
+1. The `[Plugins]` section tells Matomo which plugins to enable on installation. To disable a plugin, simply remove it from this section. Our preference is to modify this section and not the `PluginsInstalled` section, as removing a plugin from `PluginsInstalled` would remove it from the application completely. *Sadly, with the container-based Matomo, it seems to only way to activate a plugin is to use the Matomo web UI*.
 1. The `[mail]` section configures the SMTP server. Matomo uses mailers for several core functions, including password resets and reporting. Some related config values (e.g., `login_password_recovery_email_address`) are defined in the `[General]` section.
 1. The `[General]` section handles other configurations. A few of these settings are covered by the EnvironmentVariables plugin, but the rest are managed in this code.
 
