@@ -4,7 +4,7 @@ This repository supports MIT Libraries' implementation of [Matomo](https://matom
 
 ## Dependencies
 
-* Deploying this container to AWS requires that the AWS ECR Repository for the container has been created by the [mitlib-tf-workloads-ecr](https://github.com/MITLibraries/mitlib-tf-workloads-ecr) repository. 
+* Deploying this container to AWS requires that the AWS ECR Repository for the container has been created by the [mitlib-tf-workloads-ecr](https://github.com/MITLibraries/mitlib-tf-workloads-ecr) repository.
 * Building this container requires access to [Official Docker Matomo](https://hub.docker.com/_/matomo/).
 
 ## Build
