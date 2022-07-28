@@ -1,15 +1,12 @@
-FROM matomo:latest
+FROM matomo:3.13.6-apache
 
-# Install system dependencies
-RUN apt-get update && apt-get upgrade -y 
+# Add the EnvironmentVariables plugin
+COPY ./files/plugin-EnvironmentVariables-3.0.0/ /var/www/html/plugins/EnvironmentVariables
 
+# Preconfigure settings
+COPY ./files/config.ini.php /var/www/html/config/config.ini.php
 
-EXPOSE 80 443
+# Create mount point for EFS partition
+RUN mkdir -p /mnt/efs
 
-COPY config.ini.php /var/www/html/config/config.ini.php
-
-
-
-
-
-
+EXPOSE 80

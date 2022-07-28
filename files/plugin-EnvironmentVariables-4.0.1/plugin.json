@@ -1,0 +1,24 @@
+{
+    "name": "EnvironmentVariables",
+    "description": "Allows you to specify Matomo config in environment variables instead of the config file.",
+    "version": "4.0.1",
+    "theme": false,
+    "require": {
+        "matomo": ">=4.0.0-b1,<5.0.0-b1"
+    },
+    "authors": [
+        {
+            "name": "Matomo",
+            "email": "hello@matomo.org",
+            "homepage": "https://matomo.org"
+        }
+    ],
+    "support": {
+        "email": "",
+        "issues": "https://github.com/matomo-org/plugin-EnvironmentVariables/issues/",
+        "forum": "https://forum.matomo.org"
+    },
+    "homepage": "https://matomo.org",
+    "license": "GPL v3+",
+    "keywords": ["php", "environment", "variables", "configuration"]
+}
