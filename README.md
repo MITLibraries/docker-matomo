@@ -44,7 +44,7 @@ Before promoting a new build to production, ensure that IPs are anonymized by vi
 
 ### Archiving reports
 
-Matomo calls the process by which it compiles raw log data into human-readable report 'archiving'. By default, archiving occurs on demand, whenever a Matomo user attempts to view a report in the GUI. While [Matomo's recommendation](https://matomo.org/docs/setup-auto-archiving/) is to schedule this, we have **not** configured a cron job to archive reports at this time.
+Matomo calls the process by which it compiles raw log data into human-readable report 'archiving'. By default, archiving occurs on demand, whenever a Matomo user attempts to view a report in the GUI. Following [Matomo's recommendation](https://matomo.org/docs/setup-auto-archiving/) to schedule this, the mitlib-tf-workloads-matomo infrastructure repository creates an EventBridge rule/schedule for running the reporting archiving hourly.
 
 ### Authentication
 
