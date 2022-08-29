@@ -1,4 +1,4 @@
-### This is the Terraform-generated prod-promote.yml workflow for the matomo-prod app repository ###
+### This is the Terraform-generated prod-promote.yml workflow for the docker-matomo-prod app repository ###
 name: Prod Promote Fargate Container
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ jobs:
     secrets: inherit
     with:
       AWS_REGION: "us-east-1"
-      GHA_ROLE_STAGE: matomo-gha-stage
-      GHA_ROLE_PROD: matomo-gha-prod
-      ECR_STAGE: "matomo-stage"
-      ECR_PROD: "matomo-prod"
+      GHA_ROLE_STAGE: docker-matomo-gha-stage
+      GHA_ROLE_PROD: docker-matomo-gha-prod
+      ECR_STAGE: "docker-matomo-stage"
+      ECR_PROD: "docker-matomo-prod"

@@ -1,4 +1,4 @@
-### This is the Terraform-generated dev-build.yml workflow for the matomo-dev app repository ###
+### This is the Terraform-generated dev-build.yml workflow for the docker-matomo-dev app repository ###
 name: Dev Build and Deploy Fargate Container
 on:
   workflow_dispatch:
@@ -15,5 +15,5 @@ jobs:
     secrets: inherit
     with:
       AWS_REGION: "us-east-1"
-      GHA_ROLE: "matomo-gha-dev"
-      ECR: "matomo-dev"
+      GHA_ROLE: "docker-matomo-gha-dev"
+      ECR: "docker-matomo-dev"

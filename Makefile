@@ -1,8 +1,8 @@
 .PHONY: help dist-dev publish-dev dist-stage publish-stage
 SHELL=/bin/bash
-### This is the Terraform-generated header for matomo-dev ###
-ECR_NAME_DEV:=matomo-dev
-ECR_URL_DEV:=222053980223.dkr.ecr.us-east-1.amazonaws.com/matomo-dev
+### This is the Terraform-generated header for docker-matomo-dev ###
+ECR_NAME_DEV:=docker-matomo-dev
+ECR_URL_DEV:=222053980223.dkr.ecr.us-east-1.amazonaws.com/docker-matomo-dev
 ### End of Terraform-generated header ###
 
 help: ## Print this message

@@ -5,15 +5,22 @@ This repository supports MIT Libraries' implementation of [Matomo](https://matom
 ## Dependencies
 
 * Deploying this container to AWS requires that the AWS ECR Repository for the container has been created by the [mitlib-tf-workloads-ecr](https://github.com/MITLibraries/mitlib-tf-workloads-ecr) repository.
+* Running this container in AWS requires the [mitlib-tf-workloads-matomo](https://github.com/mitlibraries/mitlib-tf-workloads-matomo) infrastructure repository.
 * Building this container requires access to [Official Docker Matomo](https://hub.docker.com/_/matomo/).
 
-## Build
+## Dev/Test Build
 
 Run `make dist-dev` to create a new container tagged as `matomo:latest`.
 
-## Deploy
+## Dev/Test Deploy
 
-Run `make publish-dev` to build, tag, and push a container to Dev1 for testing, or open a PR to `main`. Merge a PR to `main` to build, tag, and push the container to Stage-Workloads. After merging the PR to `main`, tag a release to promote to production.
+Run `make publish-dev` to build, tag, and push a container to Dev1 for testing, or open a PR to `main` (a GitHub Action will build, tag, push the container for you).
+
+## Stage Builds and Promotion to Prod
+
+Merge a PR to `main` to build, tag, and push the container to Stage-Workloads. After merging the PR to `main`, tag a release on the `main` branch to promote to production. GitHub Actions in this repo will take care of the build, tag, push to Stage and the copy from Stage to Production.
+
+**Important Note**: There is no automation in GitHub to automatically deploy the new container after it is push to the ECR repository in AWS. At this time, the only method to deploy the updated container is to force a new deployment of the Matomo service via the AWS Console.
 
 ## Implementation notes
 
@@ -24,15 +31,39 @@ For detailed instructions on initial setup, migration, database upgrades, and ap
 "State" for Matomo is managed/stored in at most two locations:
 
 * the `config.ini.php` file
-* the MySQL database
+* the MariaDB database
 
-The `config.ini.php` file contains some core Matomo configuration. There are a couple of sections worth addressing:
+The `config.ini.php` file contains some core Matomo configuration. There are a couple of sections worth addressing. First, a note about a special plugin we use.
 
-1. The `[Plugins]` section tells Matomo which plugins to enable on installation. To disable a plugin, simply remove it from this section. Our preference is to modify this section and not the `PluginsInstalled` section, as removing a plugin from `PluginsInstalled` would remove it from the application completely. *Sadly, with the container-based Matomo, it seems to only way to activate a plugin is to use the Matomo web UI*.
-1. The `[mail]` section configures the SMTP server. Matomo uses mailers for several core functions, including password resets and reporting. Some related config values (e.g., `login_password_recovery_email_address`) are defined in the `[General]` section.
-1. The `[General]` section handles other configurations. A few of these settings are covered by the EnvironmentVariables plugin, but the rest are managed in this code.
+#### The EnvironmentVariables Plugin
 
-By using the [EnvironmentVariables](https://plugins.matomo.org/EnvironmentVariables) plugin for Matomo, we generally don't need to store much in the `config.ini.php` file. Instead, the [mitlib-tf-workloads-matomo](https://github.com/MITLibraries/mitlib-tf-workloads-matomo) code defines the key environment variables for the ECS service, overriding anything in `config.ini.php` and `global.ini.php`.
+We use the [EnvironmentVariables](https://plugins.matomo.org/EnvironmentVariables) plugin that allows us to set configuration values for Matomo via environment variables via the [mitlib-tf-workloads-matomo](https://github.com/mitlibraries/mitlib-tf-workloads-matomo) infrastructure repo.
+
+The current practice is to set the following core configuration information in `config.ini.php` via environment variables. 
+
+* Database connection information
+* SSL/TLS configuration
+* SMTP information
+
+The remainder of the configuration values should be set by modifying the [config.ini.php](./files/config.ini.php) file and building an updated container.
+
+#### [Plugins] and [PluginsInstalled]
+
+The `[Plugins]` section tells Matomo which plugins to enable on installation. To disable a plugin, simply remove it from this section. Our preference is to modify this section and not the `PluginsInstalled` section, as removing a plugin from `PluginsInstalled` would remove it from the application completely. While plugins can get installed in the container build, they are not automatically activated. There are two activation methods that can be used: via the web UI or via the CLI. See [Install a new plugin](https://matomo.org/faq/plugins/faq_21/) in the official Matomo documentation.
+
+Any time plugins are installed/removed, it is imperative to capture a backup of the `config.ini.php` file (via the EFS partition) before launching the updated container and then compare it to the `config.ini.php` file after verifying that the plugin is activated. This is one of the few situations where the Matomo application might update/overwrite the `config.ini.php` file.
+
+#### [Mail]
+
+The `[mail]` section configures the SMTP server. Matomo uses mailers for several core functions, including password resets and reporting. Some related config values (e.g., `login_password_recovery_email_address`) are defined in the `[General]` section.
+
+All of the settings in `[mail]` are managed via environment variables that are set by the [mitlib-tf-workloads-matomo](https://github.com/mitlibraries/mitlib-tf-workloads-matomo) infrastructure repo.
+
+#### [General]
+
+The `[General]` section handles other configurations. A few of these settings are covered by the EnvironmentVariables plugin, but the rest are managed in this code.
+
+#### Other configuration
 
 The database stores the rest of the state of Matomo: all the data itself along with the Superuser credentials and the other user accounts and credentials.
 
@@ -53,6 +84,10 @@ The superuser account can create and manage user accounts in the GUI (Administra
 We generally assign the 'View' role to new users, unless they require a higher permissions level.
 
 Matomo has built-in two-factor authentication, which we enforce for all accounts. When a user logs in to Matomo for the first time, they will be prompted to configure 2FA. At this time, we are recommending Duo as an authenticator.
+
+#### Recover from lost 2FA
+
+See the official [Recover from lost 2FA](https://matomo.org/faq/how-to/faq_27248) documentation. This allows us to recover the Superuser login if we lose the 2FA information.
 
 ## Additional documentation
 
