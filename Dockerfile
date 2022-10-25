@@ -1,10 +1,17 @@
-FROM matomo:3.13.6-apache
+FROM matomo:4.12.0
 
 # Add the EnvironmentVariables plugin
-COPY ./files/plugin-EnvironmentVariables-3.0.0/ /var/www/html/plugins/EnvironmentVariables
+COPY ./files/plugin-EnvironmentVariables-4.0.1/ /var/www/html/plugins/EnvironmentVariables
+COPY ./files/plugin-CustomVariables-4.1.1/ /var/www/html/plugins/CustomVariables
 
 # Preconfigure settings
 COPY ./files/config.ini.php /var/www/html/config/config.ini.php
+
+# Address "public" directories problem
+COPY --chmod=0644 --chown=root:root ./files/lang-htaccess /var/www/html/lang/.htaccess
+COPY --chmod=0644 --chown=root:root ./files/config-htaccess /var/www/html/config/.htaccess
+COPY --chmod=0644 --chown=root:root ./files/tmp-htaccess /var/www/html/tmp/.htaccess
+
 
 # Create mount point for EFS partition
 RUN mkdir -p /mnt/efs
