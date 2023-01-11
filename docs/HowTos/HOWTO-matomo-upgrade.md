@@ -1,6 +1,6 @@
 # How-to instructions
 
-Detailed how-to instructions for upgrade scenarios.
+Detailed how-to instructions for upgrading Matomo.
 
 ## Upgrade Database Engine
 
@@ -8,12 +8,34 @@ The database engine is managed by [mitlib-tf-workloads-matomo](https://github.co
 
 ## Update Matomo version
 
+These instructions assume you are working in the **dev** environment.  Change to the appropriate <env> tag if you are working in a different environment.
+
 1. Ensure that a backup of the current `config/config.ini.php` exists in the EFS mount.
-1. Publish updated container to ECR.
+   * SSH (via AWSCLI + Session Manager) to the container(see the [Troubleshooting](./HOWTO-miscellaneous.md) section for the AWS CLI connection command).
+   * Run the **backup-data.sh** script `/usr/local/bin/backup-data.sh`
+1. Make any necessary changes to the repo.
+   * For version upgrades, change line 1 in **Dockerfile** to the new version.
+1. Publish the updated container to ECR.
+   * Run `make dist-dev` to create the updated container.
+   * Run `make publish-dev` to push the new container to ECR and tag it as 'latest'.
 1. Deploy updated container for ECS service.
-1. Verify via webUI that the Matomo installation is ready to be upgraded.
-1. SSH (via AWSCLI + Session Manager) to the container and run the upgrade on the CLI (see the [Troubleshooting](./HOWTO-miscellaneous.md) section for the AWS CLI connection command). The database update command is `php /var/www/html/console core:update`.
-1. For the 3.x to 4.x upgrade, there is an additional step to update to the utf8mb4 character set. Once the database upgrade is complete, run `/var/www/html/console core:convert-to-utf8mb4` to update the tables.
-1. Copy updated `config/config.ini.php` to the EFS mount.
+   * Via the AWS Console:
+     * Go to ECS
+     * Click on **matomo-ecs-dev-cluster**
+     * Click on the checkbox in **Services** next to `matomo-ecs-dev-service`
+     * Click  `Update`
+     * On the next page, expand **Deployment options** and choose `Force new deployment`
+     * Click `Update`
+   * Via AWS CLI
+     * `aws ecs update-service --cluster matomo-ecs-dev-cluster --service matomo-ecs-dev-service --force-new-deployment`
+   *Either method takes a few minutes to complete the deployment.  It's easiest to verify completion in the AWS Console.  A green bar will appear at the top of the page stating `Service updated: matomo-ecs-dev-cluster:matomo-ecs-dev-service`
+1. Verify via webUI that the Matomo installation is ready to be upgraded. Ask someone in DEP to assist with this step.
+   * This step is only necessary when a database update is required.
+1. SSH (via AWSCLI + Session Manager) to the container and run the upgrade on the CLI (see the [Troubleshooting](./HOWTO-miscellaneous.md) section for the AWS CLI connection command).
+   * The database update command is `php /var/www/html/console core:update`.
+   * This step is only necessary when there is a required update to the table structure in Matomo listed in the release notes.
+1. Copy the updated `config/config.ini.php` to the EFS mount.
+   * Run the **backup-data.sh** script as in step 1.
 1. Verify that there were no changes to the `config.ini.php` file that need to be captured back in this repo.
-1. Log back in to the webUI to verify that everything is working.
+   * See [compare-ini-files](./HOWTO-compare-ini-files.md)
+1. Log back in to the webUI to verify that everything is working.  Ask someone in DEP to assist with this step.
