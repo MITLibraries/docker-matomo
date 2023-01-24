@@ -15,7 +15,7 @@ The container-based Matomo installation requires a walk through of the web UI to
 
 ## Troubleshooting
 
-It **is** possible to SSH into the Matomo container while it is running in ECS:  `Ensure you have the latest Session Manager plugin installed if you have errors or no output to the following command`
+It **is** possible to SSH into the Matomo container while it is running in ECS:  **Ensure you have the latest Session Manager plugin installed if you have errors or no output to the following command:**
 
 ```bash
 aws ecs execute-command --region {name-of-the-region} --cluster {name-of-the-cluster} --task {task number} --command "/bin/bash" --interactive
