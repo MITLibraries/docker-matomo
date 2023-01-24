@@ -15,10 +15,36 @@ The container-based Matomo installation requires a walk through of the web UI to
 
 ## Troubleshooting
 
-It **is** possible to SSH into the Matomo container while it is running in ECS:
+It **is** possible to SSH into the Matomo container while it is running in ECS:  **Ensure you have the latest Session Manager plugin installed if you have errors or no output to the following command:**
 
 ```bash
 aws ecs execute-command --region {name-of-the-region} --cluster {name-of-the-cluster} --task {task number} --command "/bin/bash" --interactive
 ```
 
 This can be used for quick checks of the `config.ini.php` file to see if actions in the UI made any modifications. This is also required for doing major version upgrades of Matomo (e.g. from 3.x to 4.x).
+
+To retrieve the **task number** value for the command:
+
+* Open the AWS Dev1 console in your browser
+* Navigate to ECS (Elastic Container Service)
+* Click on `matomo-ecs-dev-cluster` (This is also the cluster name for the above command)
+* Click on the `Tasks` tab
+* Copy the Task number from the list (there should be only one)
+
+OR
+
+```bash
+aws ecs list-clusters | grep matomo
+aws ecs list-tasks --cluster matomo-ecs-dev-cluster (or result from previous command)
+# The task number is the 32 character hex string at the end of the line
+```
+
+## Reset 2-Factor auth
+
+If we ever need to reset the 2FA configuration for a user, this is the command to run on the CLI of the container
+
+```bash
+./console twofactorauth:disable-2fa-for-user --login=yourlogin
+```
+
+See [FAQ_27248](https://matomo.org/faq/how-to/faq_27248/) for more details.

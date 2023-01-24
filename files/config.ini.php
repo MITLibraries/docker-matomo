@@ -11,11 +11,17 @@ datatable_archiving_maximum_rows_referrers = 5000
 ; maximum number of rows for any of the Referers subtable (search engines by keyword, keyword by campaign, etc.), and Custom variables values
 datatable_archiving_maximum_rows_subtable_referrers = 5000
 
+; maximum number of rows for the User ID report
+datatable_archiving_maximum_rows_userid_users = 5000
+
 ; maximum number of rows for any of the Actions tables (pages, downloads, outlinks)
 datatable_archiving_maximum_rows_actions = 5000
 
 ; maximum number of rows for pages in categories (sub pages, when clicking on the + for a page category)
 datatable_archiving_maximum_rows_subtable_actions = 5000
+
+; maximum number of rows for the Site Search table
+ datatable_archiving_maximum_rows_site_search = 5000
 
 ; maximum number of rows for any of the Events tables (Categories, Actions, Names)
 datatable_archiving_maximum_rows_events = 5000
@@ -23,15 +29,10 @@ datatable_archiving_maximum_rows_events = 5000
 ; maximum number of rows for sub-tables of the Events tables (eg. for the subtables Categories>Actions or Categories>Names).
 datatable_archiving_maximum_rows_subtable_events = 100
 
-; maximum number of rows for the Site Search table
- datatable_archiving_maximum_rows_site_search = 5000
-
-; maximum number of rows for the User ID report
-datatable_archiving_maximum_rows_userid_users = 5000
-
 [mail]
 
 [Plugins]
+Plugins[] = "CoreVue"
 Plugins[] = "CorePluginsAdmin"
 Plugins[] = "CoreAdminHome"
 Plugins[] = "CoreHome"
@@ -71,7 +72,6 @@ Plugins[] = "CoreConsole"
 Plugins[] = "ScheduledReports"
 Plugins[] = "UserCountryMap"
 Plugins[] = "Live"
-Plugins[] = "CustomVariables"
 Plugins[] = "PrivacyManager"
 Plugins[] = "ImageGraph"
 Plugins[] = "Annotations"
@@ -86,7 +86,10 @@ Plugins[] = "DevicePlugins"
 Plugins[] = "Heartbeat"
 Plugins[] = "Intl"
 Plugins[] = "Tour"
+Plugins[] = "PagePerformance"
+Plugins[] = "CustomDimensions"
 Plugins[] = "MobileAppMeasurable"
+Plugins[] = "CustomVariables"
 Plugins[] = "EnvironmentVariables"
 
 [PluginsInstalled]
@@ -150,3 +153,7 @@ PluginsInstalled[] = "Marketplace"
 PluginsInstalled[] = "ProfessionalServices"
 PluginsInstalled[] = "Tour"
 PluginsInstalled[] = "EnvironmentVariables"
+PluginsInstalled[] = "CoreVue"
+PluginsInstalled[] = "MobileAppMeasurable"
+PluginsInstalled[] = "PagePerformance"
+PluginsInstalled[] = "CustomDimensions"
