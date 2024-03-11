@@ -8,13 +8,14 @@ The database engine is managed by [mitlib-tf-workloads-matomo](https://github.co
 
 ## Update Matomo version
 
-These instructions assume you are working in the **dev** environment.  Change to the appropriate <env> tag if you are working in a different environment.
+These instructions assume you are working in the **dev** environment.  Change to the appropriate `<env>` tag if you are working in a different environment.
 
 1. Ensure that a backup of the current `config/config.ini.php` exists in the EFS mount.
    * SSH (via AWSCLI + Session Manager) to the container(see the [Troubleshooting](./HOWTO-miscellaneous.md) section for the AWS CLI connection command).
    * Run the **backup-data.sh** script `/usr/local/bin/backup-data.sh`
 1. Make any necessary changes to the repo.
    * For version upgrades, change line 1 in **Dockerfile** to the new version.
+   * Verify plugin versions for compatibility with new version of Matomo. See **Update Matomo Plugins** below for more details.
 1. Publish the updated container to ECR.
    * Run `make dist-dev` to create the updated container.
    * Run `make publish-dev` to push the new container to ECR and tag it as 'latest'.
@@ -39,3 +40,15 @@ These instructions assume you are working in the **dev** environment.  Change to
 1. Verify that there were no changes to the `config.ini.php` file that need to be captured back in this repo.
    * See [compare-ini-files](./HOWTO-compare-ini-files.md)
 1. Log back in to the webUI to verify that everything is working.  Ask someone in DEP to assist with this step.
+
+## Update Matomo Plugins
+
+Often, an update to the version of Matomo will require an update to a plugin version. See below for an overview of the plugin update process.
+
+1. Ensure that a backup of the current `config/config.ini.php` exists in the EFS mount.
+   * SSH (via AWSCLI + Session Manager) to the container(see the [Troubleshooting](./HOWTO-miscellaneous.md) section for the AWS CLI connection command).
+   * Run the **backup-data.sh** script `/usr/local/bin/backup-data.sh`
+1. Visit [Matomo plugins](https://plugins.matomo.org), select the correct version of Matomo, and then search for the plugins that are currently in use in our instance of Matomo.
+   * If there is a newer version, download it from the site, unzip it, and store the unzipped folder in the [files/](../../files/) directory, following the naming convention in place (e.g., `plugin-<plugin_name>-<version>`)
+1. Update the [Dockerfile](../../Dockerfile) to reference the newer version of the plugin stored in the [files/](../../files/) directory.
+1. Proceed with the publishing process as outlined in the **Update Matomo Version** instructions above.
