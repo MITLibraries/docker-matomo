@@ -1,4 +1,4 @@
-FROM matomo:5.1.0
+FROM matomo:5.1.1
 
 # Add the EnvironmentVariables plugin
 COPY ./files/plugin-EnvironmentVariables-5.0.0/ /var/www/html/plugins/EnvironmentVariables
