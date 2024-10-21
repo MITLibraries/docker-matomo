@@ -24,7 +24,7 @@ Merge a PR to `main` to build, tag, and push the container to Stage-Workloads. A
 
 ## Implementation notes
 
-For detailed instructions on initial setup, migration, database upgrades, and application upgrades, see [docs/HOWTO.md](./docs/HOWTO.md).
+For detailed instructions on initial setup, migration, database upgrades, and application upgrades, check the [HowTos](./docs/HowTos/) folder.
 
 ### Configuration Management
 
