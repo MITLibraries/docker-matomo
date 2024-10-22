@@ -1,7 +1,7 @@
-FROM matomo:5.1.1
+FROM matomo:5.1.2
 
 # Add the EnvironmentVariables plugin
-COPY ./files/plugin-EnvironmentVariables-5.0.0/ /var/www/html/plugins/EnvironmentVariables
+COPY ./files/plugin-EnvironmentVariables-5.0.2/ /var/www/html/plugins/EnvironmentVariables
 
 # Add the CustomVariables plugin
 COPY ./files/plugin-CustomVariables-5.0.2/ /var/www/html/plugins/CustomVariables
