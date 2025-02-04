@@ -3,6 +3,7 @@
 [database]
 schema = Mariadb
 charset = utf8mb4
+collation = utf8mb4_general_ci
 
 [General]
 proxy_client_headers[] = "HTTP_X_FORWARDED_FOR"
@@ -90,6 +91,7 @@ Plugins[] = "Intl"
 Plugins[] = "Tour"
 Plugins[] = "PagePerformance"
 Plugins[] = "CustomDimensions"
+Plugins[] = "FeatureFlags"
 Plugins[] = "MobileAppMeasurable"
 Plugins[] = "CustomVariables"
 Plugins[] = "EnvironmentVariables"
@@ -159,3 +161,4 @@ PluginsInstalled[] = "CoreVue"
 PluginsInstalled[] = "MobileAppMeasurable"
 PluginsInstalled[] = "PagePerformance"
 PluginsInstalled[] = "CustomDimensions"
+PluginsInstalled[] = "FeatureFlags"
