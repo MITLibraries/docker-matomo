@@ -89,7 +89,15 @@ Matomo has built-in two-factor authentication, which we enforce for all accounts
 
 See the official [Recover from lost 2FA](https://matomo.org/faq/how-to/faq_27248) documentation. This allows us to recover the Superuser login if we lose the 2FA information.
 
-## Additional documentation
+## Related Assets
 
-* [MIT Libraries dev docs](https://mitlibraries.github.io/guides/misc/matomo.html) - includes information about setting up a website for tracking in Matomo.
-* [Matomo help center](https://matomo.org/help/) - offical Matomo docs. Includes user guide, developer guide, FAQ, and community support forum.
+* Infrastructure: [mitlib-tf-workloads-matomo](https://github.com/MITLibraries/mitlib-tf-workloads-matomo)
+
+## Maintainers
+
+* Owner: See [CODEOWNERS](./.github/CODEOWNERS)
+* Team: See [CODEOWNERS](./.github/CODEOWNERS)
+* Last Maintenance: 2025-02
+* External Documentation:
+  * [MIT Libraries dev docs](https://mitlibraries.github.io/guides/misc/matomo.html) - includes information about setting up a website for tracking in Matomo.
+  * [Matomo help center](https://matomo.org/help/) - offical Matomo docs. Includes user guide, developer guide, FAQ, and community support forum.
