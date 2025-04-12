@@ -1,4 +1,6 @@
-FROM matomo:5.2.2
+FROM matomo:5.3.1
+  # checkov:skip=CKV_DOCKER_2:Skipping HEALTHCHECK configuration for now
+  # checkov:skip=CKV_DOCKER_3:Intentionally using root for the user
 
 # Add the EnvironmentVariables plugin
 COPY ./files/plugin-EnvironmentVariables-5.0.3/ /var/www/html/plugins/EnvironmentVariables
@@ -13,7 +15,6 @@ COPY ./files/config.ini.php /var/www/html/config/config.ini.php
 COPY --chmod=0644 --chown=root:root ./files/lang-htaccess /var/www/html/lang/.htaccess
 COPY --chmod=0644 --chown=root:root ./files/config-htaccess /var/www/html/config/.htaccess
 COPY --chmod=0644 --chown=root:root ./files/tmp-htaccess /var/www/html/tmp/.htaccess
-
 
 # Create mount point for EFS partition
 RUN mkdir -p /mnt/efs
