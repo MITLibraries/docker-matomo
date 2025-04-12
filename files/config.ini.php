@@ -32,6 +32,7 @@ datatable_archiving_maximum_rows_events = 5000
 ; maximum number of rows for sub-tables of the Events tables (eg. for the subtables Categories>Actions or Categories>Names).
 datatable_archiving_maximum_rows_subtable_events = 100
 
+
 [mail]
 
 [Plugins]
@@ -87,6 +88,7 @@ Plugins[] = "BulkTracking"
 Plugins[] = "Resolution"
 Plugins[] = "DevicePlugins"
 Plugins[] = "Heartbeat"
+Plugins[] = "Marketplace"
 Plugins[] = "Intl"
 Plugins[] = "Tour"
 Plugins[] = "PagePerformance"
