@@ -8,6 +8,12 @@ COPY ./files/plugin-EnvironmentVariables-5.0.3/ /var/www/html/plugins/Environmen
 # Add the CustomVariables plugin
 COPY ./files/plugin-CustomVariables-5.0.4/ /var/www/html/plugins/CustomVariables
 
+# Add the HeatmapSessionRecording plugin
+COPY ./files/plugin-HeatmapSessionRecording-5.2.3/ /var/www/html/plugins/HeatmapSessionRecording
+
+# Add the UsersFlow plugin
+COPY ./files/plugin-UsersFlow-5.0.5/ /var/www/html/plugins/UsersFlow
+
 # Preconfigure settings
 COPY ./files/config.ini.php /var/www/html/config/config.ini.php
 
