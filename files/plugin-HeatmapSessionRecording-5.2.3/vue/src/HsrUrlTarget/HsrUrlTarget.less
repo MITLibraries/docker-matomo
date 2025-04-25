@@ -1,0 +1,17 @@
+.hsrUrltarget {
+  margin-bottom: 40px;
+
+  .targetValue,
+  .targetValue2,
+  .targetType {
+    margin-top:10px;
+  }
+
+  // set the opacity of individual elements to 0.6 instead of the root element if disabled, otherwise
+  // the select dropdown contents will be slightly transparent
+  &.disabled {
+    input,label,.icon-plus,.icon-minus {
+      opacity: 0.6;
+    }
+  }
+}
