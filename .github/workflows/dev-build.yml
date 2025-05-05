@@ -1,7 +1,8 @@
-### This is the Terraform-generated dev-build.yml workflow for the docker-matomo-dev app repository ###
-### If this is a Lambda repo, uncomment the FUNCTION line at the end of the document     ###
-### If the container requires any additional pre-build commands, uncomment and edit      ###
-### the PREBUILD line at the end of the document.                                        ###
+### This is the Terraform-generated dev-build.yml workflow for the          ###
+### docker-matomo-dev app repository.                                       ###
+### If this is a Lambda repo, uncomment the FUNCTION line at the end of the ###
+### document. If the container requires any additional pre-build commands,  ###
+### uncomment and edit the PREBUILD line at the end of the document.        ###
 name: Dev Container Build and Deploy
 on:
   workflow_dispatch:
@@ -11,8 +12,15 @@ on:
     paths-ignore:
       - '.github/**'
 
+permissions: read-all
+
 jobs:
   deploy:
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+
     name: Dev Container Deploy
     uses: mitlibraries/.github/.github/workflows/ecr-shared-deploy-dev.yml@main
     secrets: inherit
