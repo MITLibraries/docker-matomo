@@ -21,12 +21,12 @@ Before getting started, make sure that you have access to the `root` password fo
 
 ### Legacy AWS
 
-In the legacy Stage/Prod account, log in to the `efs-access-matomo-<env>` EC2 instance (`<env>` is either `stage` or `prod` depending on the database being backed up). Requires AWS CLI v2, AWS Session-Manager Plugin for AWSCLI.
+In the legacy Stage/Prod account, log in to the `matomo-efs-mgmt` EC2 instance (`<env>` is either `stage` or `prod` depending on the database being backed up). Requires AWS CLI v2, AWS Session-Manager Plugin for AWSCLI.
 
 To capture the InstanceID of the EC2 instance to connect to, run the following command:
 
 ```bash
-aws ec2 describe-instances --filters "Name=tag:Name,Values=efs-access-matomo-<env>" --query "Reservations[*].Instances[*].[InstanceId]" --output text
+aws ec2 describe-instances --filters "Name=tag:Name,Values=matomo-efs-mgmt" --query "Reservations[*].Instances[*].[InstanceId]" --output text
 ```
 
 To capture the RDS_ENDPOINT for the database, run the following command:

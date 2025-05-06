@@ -23,7 +23,7 @@ In the end, the premium plugin installation is a two-pass process.
 ### High level overview
 
 1. Install license key (via UI or CLI) so that it is in the database.
-2. Go through a dev -> stage -> prod deployment cycle of the container to install the plugin folder(s) into the container and update the `config.ini.php` file with new line(s) in the `[PluginsInstalled]` section.
+2. Go through a dev -> stage -> prod deployment cycle of the container to install the plugin folder(s) into the container.
 3. Activate the new plugin(s) (via UI or CLI) so that any database changes are properly executed.
 4. Go through a dev -> stage -> prod deployment cycle of the container to match the updated `config.ini.php` file on the server.
 
@@ -41,13 +41,13 @@ According to the support team at Matomo, the premium license key can be installe
 
 This needs to be done on each of the stage & prod instances of Matomo.
 
-#### 2. Install plugin
+#### 2. Install the plugin files
 
-In this phase, the files are installed in the container and the `config.ini.php` is updated to match the installation. This will **not** activate the plugins, it will just make them visible in the UI. The only new lines in the `config.ini.php` should be in the `[PluginsInstalled]` section.
+In this phase, the files are installed in the container *but no changes are made to the `config.ini.php` file. This will **not** activate the plugins, it will just make them visible in the UI.
 
-#### 3. Activate plugin
+#### 3. Activate the plugin
 
-Once the plugin is installed, it's time to activate it. In the UI, it's just a matter of clicking the `Activate` link for the plugin. For the CLI, the command is
+Once the plugin files are installed in the container, it's time to activate the plugin. In the UI, it's just a matter of clicking the `Activate` link for the plugin. For the CLI, the command is
 
 ```bash
 ./console plugin:activate [<plugin>...]
@@ -55,6 +55,6 @@ Once the plugin is installed, it's time to activate it. In the UI, it's just a m
 
 This will change the `config.ini.php` file on the container. It is **very** important to capture these changes and put them back in the `config.ini.php` in the container (see step 4).
 
-#### 4. Deploy new config.ini.php
+#### 4. Backfill this repo
 
-After capturing the changes to `config.ini.php`, go through another round of dev -> stage -> prod deploys.
+Update the `config.ini.php` file in this repo and go through another dev -> stage -> prod deployment to ensure that the repo code matches the container running in AWS.

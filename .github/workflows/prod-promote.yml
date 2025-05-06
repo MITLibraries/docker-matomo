@@ -1,13 +1,22 @@
-### This is the Terraform-generated prod-promote.yml workflow for the docker-matomo-prod repository. ###
-### If this is a Lambda repo, uncomment the FUNCTION line at the end of the document.         ###
+### This is the Terraform-generated prod-promote.yml workflow for the       ###
+### docker-matomo-prod repository.                                          ###
+### If this is a Lambda repo, uncomment the FUNCTION line at the end of the ###
+### document.                                                               ###
 name: Prod Container Promote
 on:
   workflow_dispatch:
   release:
     types: [published]
 
+permissions: read-all
+
 jobs:
   deploy:
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+
     name: Prod Container Promote
     uses: mitlibraries/.github/.github/workflows/ecr-shared-promote-prod.yml@main
     secrets: inherit

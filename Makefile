@@ -1,12 +1,12 @@
 .PHONY: help dist-dev publish-dev dist-stage publish-stage
 SHELL=/bin/bash
 ### This is the Terraform-generated header for docker-matomo-dev. If  ###
-###   this is a Lambda repo, uncomment the FUNCTION line below  ###
-###   and review the other commented lines in the document.     ###
+###   this is a Lambda repo, uncomment the FUNCTION line below        ###
+###   and review the other commented lines in the document.           ###
 ECR_NAME_DEV:=docker-matomo-dev
 ECR_URL_DEV:=222053980223.dkr.ecr.us-east-1.amazonaws.com/docker-matomo-dev
 # FUNCTION_DEV:=
-### End of Terraform-generated header                            ###
+### End of Terraform-generated header                                 ###
 
 help: ## Print this message
 	@awk 'BEGIN { FS = ":.*##"; print "Usage:  make <target>\n\nTargets:" } \
