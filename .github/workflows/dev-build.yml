@@ -1,9 +1,10 @@
 ### This is the Terraform-generated dev-build.yml workflow for the          ###
 ### docker-matomo-dev app repository.                                       ###
-### If this is a Lambda repo, uncomment the FUNCTION line at the end of the ###
-### document. If the container requires any additional pre-build commands,  ###
-### uncomment and edit the PREBUILD line at the end of the document.        ###
 name: Dev Container Build and Deploy
+
+# checkov:skip=CKV2_GHA_1:The shared workflow contains the permissions constraints
+# NOTE: The above checkov skip command doesn't actually work and this workflow
+#       will always show a checkov warning.
 on:
   workflow_dispatch:
   pull_request:
@@ -12,21 +13,12 @@ on:
     paths-ignore:
       - '.github/**'
 
-permissions: read-all
-
 jobs:
   deploy:
-    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
-    permissions:
-      id-token: write
-      contents: read
-
     name: Dev Container Deploy
-    uses: mitlibraries/.github/.github/workflows/ecr-shared-deploy-dev.yml@main
+    uses: mitlibraries/.github/.github/workflows/ecr-shared-deploy-dev.yml@INFRA-526
     secrets: inherit
     with:
       AWS_REGION: "us-east-1"
       GHA_ROLE: "docker-matomo-gha-dev"
       ECR: "docker-matomo-dev"
-      # FUNCTION: ""
-      # PREBUILD: 
