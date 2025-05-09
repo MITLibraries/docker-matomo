@@ -1,6 +1,7 @@
 ### This is the Terraform-generated dev-build.yml workflow for the          ###
 ### docker-matomo-stage app repository.                                     ###
 name: Stage Container Build and Deploy
+
 # checkov:skip=CKV2_GHA_1:The shared workflow contains the permissions constraints
 # NOTE: The above checkov skip command doesn't actually work and this workflow
 #       will always show a checkov warning.
@@ -16,7 +17,7 @@ on:
 jobs:
   deploy:
     name: Stage Container Deploy
-    uses: mitlibraries/.github/.github/workflows/ecr-shared-deploy-stage.yml@main
+    uses: mitlibraries/.github/.github/workflows/ecr-shared-deploy-stage.yml@INFRA-526
     secrets: inherit
     with:
       AWS_REGION: "us-east-1"
