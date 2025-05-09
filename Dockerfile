@@ -1,6 +1,6 @@
-FROM matomo:5.3.1
+FROM matomo:5.3.2
   # checkov:skip=CKV_DOCKER_2:Skipping HEALTHCHECK configuration for now
-  # checkov:skip=CKV_DOCKER_3:Intentionally using root for the user
+  # checkov:skip=CKV_DOCKER_3:The container actually runs as www-data user
 
 # Add the EnvironmentVariables plugin
 COPY ./files/plugin-EnvironmentVariables-5.0.3/ /var/www/html/plugins/EnvironmentVariables

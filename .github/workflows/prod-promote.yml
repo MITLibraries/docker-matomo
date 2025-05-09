@@ -1,24 +1,21 @@
 ### This is the Terraform-generated prod-promote.yml workflow for the       ###
 ### docker-matomo-prod repository.                                          ###
-### If this is a Lambda repo, uncomment the FUNCTION line at the end of the ###
-### document.                                                               ###
+
 name: Prod Container Promote
+
+# checkov:skip=CKV2_GHA_1:The shared workflow contains the permissions constraints
+# NOTE: The above checkov skip command doesn't actually work and this workflow
+#       will always show a checkov warning.
+
 on:
   workflow_dispatch:
   release:
     types: [published]
 
-permissions: read-all
-
 jobs:
   deploy:
-    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
-    permissions:
-      id-token: write
-      contents: read
-
     name: Prod Container Promote
-    uses: mitlibraries/.github/.github/workflows/ecr-shared-promote-prod.yml@main
+    uses: mitlibraries/.github/.github/workflows/ecr-shared-promote-prod.yml@INFRA-526
     secrets: inherit
     with:
       AWS_REGION: "us-east-1"
