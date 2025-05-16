@@ -6,6 +6,13 @@ charset = utf8mb4
 collation = utf8mb4_general_ci
 
 [General]
+; disable browser-triggered archiving and expire archives in 30 minutes
+browser_archiving_disabled_enforce = 1 
+time_before_today_archive_considered_outdated = 1800
+
+; for now, disable host checking since we are behind ALB that does host checking for us
+enable_trusted_host_check=0
+
 proxy_client_headers[] = "HTTP_X_FORWARDED_FOR"
 
 ; maximum number of rows for any of the Referers tables (keywords, search engines, campaigns, etc.), and Custom variables names
@@ -24,7 +31,7 @@ datatable_archiving_maximum_rows_actions = 5000
 datatable_archiving_maximum_rows_subtable_actions = 5000
 
 ; maximum number of rows for the Site Search table
- datatable_archiving_maximum_rows_site_search = 5000
+datatable_archiving_maximum_rows_site_search = 5000
 
 ; maximum number of rows for any of the Events tables (Categories, Actions, Names)
 datatable_archiving_maximum_rows_events = 5000

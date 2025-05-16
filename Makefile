@@ -14,7 +14,8 @@ help: ## Print this message
 
 ### Terraform-generated Developer Deploy Commands for Dev environment ###
 dist-dev: ## Build docker container (intended for developer-based manual build)
-	docker build --platform linux/amd64 \
+	docker build \
+		--platform linux/amd64 \
 	    -t $(ECR_URL_DEV):latest \
 		-t $(ECR_URL_DEV):`git describe --always` \
 		-t $(ECR_NAME_DEV):latest .
@@ -35,7 +36,8 @@ publish-dev: dist-dev ## Build, tag and push (intended for developer-based manua
 ###   authenticated to the correct AWS Account. The values for the environment  ###
 ###   variables can be found in the stage_build.yml caller workflow.            ###
 dist-stage: ## Only use in an emergency
-	docker build --platform linux/amd64 \
+	docker build \
+		--platform linux/amd64 \
 	    -t $(ECR_URL_STAGE):latest \
 		-t $(ECR_URL_STAGE):`git describe --always` \
 		-t $(ECR_NAME_STAGE):latest .

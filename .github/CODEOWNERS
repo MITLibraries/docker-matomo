@@ -13,7 +13,11 @@
 # Teams can be specified as code owners as well. Teams should be identified in
 # the format @org/team-name. Teams must have explicit write access to the 
 # repository.
-* @mitlibraries/infraeng-terraform-reviewers
+* @mitlibraries/infraeng
+
+# We assign Dhruti as an owner of the Dockerfile, since she should approve any
+# core changes to Matomo (especially version upgrades)
+/Dockerfile @dhrutibc
 
 # We set the senior engineer in the team as the owner of the CODEOWNERS file as
 # a layer of protection for unauthorized changes.

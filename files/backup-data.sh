@@ -1,7 +1,15 @@
 #!/bin/bash
 
-/bin/cp -r /var/www/html/config/ /mnt/efs/config/
-/bin/cp -r /var/www/html/misc/user /mnt/efs/misc_user
-/bin/cp -r /var/www/html/js/ /mnt/efs/js/
-/bin/cp -r /var/www/html/matomo.js /mnt/efs/matomo.js
-/bin/cp -r /var/www/html/piwik.js /mnt/efs/piwik.js
+target_dir="/mnt/efs"
+
+mkdir -p "$target_dir/config"
+tar -cf - -C "/var/www/html/config" . | tar -xf - -C "$target_dir/config"
+
+mkdir -p "$target_dir/misc"
+tar -cf - -C "/var/www/html/misc" . | tar -xf - -C "$target_dir/misc"
+
+mkdir -p "$target_dir/js"
+tar -cf - -C "/var/www/html/js" . | tar -xf - -C "$target_dir/js"
+
+cp -a "/var/www/html/matomo.js" "$target_dir/matomo.js"
+cp -a "/var/www/html/piwik.js" "$target_dir/piwik.js"
