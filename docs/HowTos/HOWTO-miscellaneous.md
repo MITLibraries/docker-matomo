@@ -34,9 +34,8 @@ To retrieve the **task number** value for the command:
 OR
 
 ```bash
-aws ecs list-clusters | grep matomo
-aws ecs list-tasks --cluster matomo-ecs-dev-cluster (or result from previous command)
-# The task number is the 32 character hex string at the end of the line
+aws ecs list-clusters --output text | grep matomo | cut -d'/' -f2
+aws ecs list-tasks --cluster $(aws ecs list-clusters --output text | grep matomo | cut -d'/' -f2) --query "taskArns[*]" --output text | cut -d'/' -f3
 ```
 
 ## Reset 2-Factor auth
