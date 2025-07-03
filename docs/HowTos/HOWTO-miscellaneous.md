@@ -34,8 +34,13 @@ To retrieve the **task number** value for the command:
 OR
 
 ```bash
-aws ecs list-clusters --output text | grep matomo | cut -d'/' -f2
-aws ecs list-tasks --cluster $(aws ecs list-clusters --output text | grep matomo | cut -d'/' -f2) --query "taskArns[*]" --output text | cut -d'/' -f3
+aws ecs execute-command --region us-east-1 --cluster $(aws ecs list-clusters --output text | grep matomo | cut -d'/' -f2) --task $(aws ecs list-tasks --cluster $(aws ecs list-clusters --output text | grep matomo | cut -d'/' -f2) --query "taskArns[*]" --output text | cut -d'/' -f3) --command "/bin/bash" --interactive
+```
+
+If you need to force a redeployment of the task for the service, this one-liner will work:
+
+```bash
+aws ecs update-service --cluster $(aws ecs list-clusters --output text | grep matomo | cut -d'/' -f2) --service $(aws ecs list-services --cluster $(aws ecs list-clusters --output text | grep matomo | cut -d'/' -f2) --output text | grep matomo | cut -d'/' -f3) --force-new-deployment
 ```
 
 ## Reset 2-Factor auth

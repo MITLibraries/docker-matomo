@@ -1,0 +1,46 @@
+COPYRIGHT
+
+	The software package is:
+
+		Copyright (C) 2017 InnoCraft Ltd (NZBN 6106769)
+
+
+SOFTWARE LICENSE
+
+	This software is licensed under the InnoCraft EULA and the license has been included in this
+	software package in the file LICENSE.
+
+
+THIRD-PARTY COMPONENTS AND LIBRARIES
+
+	The following components/libraries are redistributed in this package,
+	and subject to their respective licenses.
+
+	Name:  heatmap.js
+	Link:  https://www.patrick-wied.at/static/heatmapjs/
+	License:  MIT
+	License File: ibs/heatmap.js/LICENSE
+
+	Name:  mutation-summary
+	Link:  https://github.com/rafaelw/mutation-summary/
+	License:  Apache 2.0
+	License File: libs/mutation-summary/COPYING
+
+	Name:  MutationObserver.js
+	Link:  https://github.com/megawac/MutationObserver.js/tree/master
+	License:  WTFPL, Version 2
+	License File: libs/MutationObserver.js/license
+
+	Name:  svg.js
+	Link:  http://tkyk.github.com/jquery-history-plugin/
+	License:  http://svgjs.com/
+	License File:  libs/svg.js/LICENSE.txt
+
+	Name:  Get Element CSS Selector
+	Link:  https://gist.github.com/asfaltboy/8aea7435b888164e8563
+	License:  MIT
+	License File: included in tracker.min.js
+
+	Name: Material icons ("repeat", "looks_one", "looks_two", "looks_four", "looks_six") in angularjs/sessionvis/sessionvis.directive.html
+	Link: https://design.google.com/icons/
+	License: Apache License Version 2.0
