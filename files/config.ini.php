@@ -107,6 +107,7 @@ Plugins[] = "TagManager"
 Plugins[] = "CustomVariables"
 Plugins[] = "EnvironmentVariables"
 Plugins[] = "HeatmapSessionRecording"
+Plugins[] = "SearchEngineKeywordsPerformance"
 Plugins[] = "UsersFlow"
 
 
@@ -183,6 +184,7 @@ PluginsInstalled[] = "VisitorInterest"
 PluginsInstalled[] = "VisitsSummary"
 PluginsInstalled[] = "WebsiteMeasurable"
 PluginsInstalled[] = "Widgetize"
+PluginsInstalled[] = "SearchEngineKeywordsPerformance"
 
 [HeatmapSessionRecording]
 add_tracking_code_only_when_needed = 1
