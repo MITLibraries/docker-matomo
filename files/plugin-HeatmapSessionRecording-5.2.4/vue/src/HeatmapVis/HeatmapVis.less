@@ -1,0 +1,99 @@
+.heatmapVis {
+
+    .aboveFoldLine {
+        height: 4px;
+        background: orange;
+        position: absolute;
+
+        div {
+            color: orange;
+            margin-top: 4px;
+            margin-left: 4px;
+        }
+    }
+
+    .iframeRecordingContainer {
+        position: relative;
+    }
+
+    .numSamples {
+        position: relative;
+        top: -2px;
+    }
+
+    .customIframeWidth {
+        display: inline-block;
+        margin-bottom: -3rem;
+        margin-right: -6rem;
+
+        .matomo-form-field {
+            margin-top: -3.2rem;
+            margin-left: 5rem;
+        }
+    }
+
+    .heatmapTile {
+        width: 100%;
+    }
+
+    .heatmapWrapper {
+        position: absolute;
+
+        #heatmapContainer {
+            position:absolute;
+            width: 1000px;
+            height: 1000px;
+        }
+    }
+
+    .heatmapSelection {
+        margin-bottom: 16px;
+        white-space: nowrap;
+    }
+
+    .legendOuter {
+        white-space: nowrap;
+        display:inline;
+
+        h4 {
+            display: inline;
+            margin-left: 2.5rem;
+            margin-right: 10px;
+        }
+    }
+
+    .legend-area {
+        display: inline;
+        .min {
+            margin-left: 8px;
+            margin-right: 8px;
+        }
+        .max {
+            margin-left: 16px;
+        }
+    }
+
+    .btn-flat {
+        border: 1px solid #ccc;
+        border-radius: 0 !important;
+        margin-left: -1px;
+    }
+
+    .visActive {
+        background-color: #ddd;
+    }
+
+    #highlightDiv {
+        position: absolute;
+        background-color: #424242;
+        opacity: 0.5;
+        z-index: 999;
+        pointer-events: none;
+    }
+}
+
+.heatmap-vis-title {
+    .title {
+        color: @theme-color-headline-alternative !important;
+    }
+}

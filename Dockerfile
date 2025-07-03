@@ -9,16 +9,16 @@ COPY ./files/plugin-EnvironmentVariables-5.0.3/ /var/www/html/plugins/Environmen
 COPY ./files/plugin-CustomVariables-5.0.4/ /var/www/html/plugins/CustomVariables
 
 # Add the HeatmapSessionRecording plugin
-COPY ./files/plugin-HeatmapSessionRecording-5.2.3/ /var/www/html/plugins/HeatmapSessionRecording
+COPY ./files/plugin-HeatmapSessionRecording-5.2.4/ /var/www/html/plugins/HeatmapSessionRecording
 
 # Add the UsersFlow plugin
 COPY ./files/plugin-UsersFlow-5.0.5/ /var/www/html/plugins/UsersFlow
 
-# Our custom configuration settings. We put it in /usr/src because the 
-# entrypoint.sh builds the /var/www/html folder from the /usr/src/matomo 
-# folder. This ensures that the config file from our updated container is the 
-# one that is pushed to the persistent EFS storage.
-COPY ./files/config.ini.php /usr/src/matomo/config/config.ini.php
+# Add the SearchEngineKeywordsPerformance plugin
+COPY ./files/plugin-SearchEngineKeywordsPerformance-5.0.22/ /var/www/html/plugins/SearchEngineKeywordsPerformance
+
+# Our custom configuration settings.
+COPY ./files/config.ini.php /var/www/html/config/config.ini.php
 
 # The HeatmapSessionRecording and UsersFlow update the matomo.js and piwik.js
 # files when they are activated. Those updates have been captured and we
