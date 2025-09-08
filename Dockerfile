@@ -1,4 +1,4 @@
-FROM matomo:5.3.2
+FROM matomo:5.4.0
   # checkov:skip=CKV_DOCKER_2:Skipping HEALTHCHECK configuration for now
   # checkov:skip=CKV_DOCKER_3:The container actually runs as www-data user
 
@@ -16,6 +16,9 @@ COPY ./files/plugin-UsersFlow-5.0.5/ /var/www/html/plugins/UsersFlow
 
 # Add the SearchEngineKeywordsPerformance plugin
 COPY ./files/plugin-SearchEngineKeywordsPerformance-5.0.22/ /var/www/html/plugins/SearchEngineKeywordsPerformance
+
+# Add the CustomReports plugin
+COPY ./files/plugin-CustomReports-5.4.3/ /var/www/html/plugins/CustomReports
 
 # Our custom configuration settings.
 COPY ./files/config.ini.php /var/www/html/config/config.ini.php

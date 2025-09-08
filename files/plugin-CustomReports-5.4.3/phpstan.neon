@@ -1,0 +1,15 @@
+parameters:
+    level: 0
+    phpVersion: 70200
+    paths:
+        - .
+    excludePaths:
+        - tests/*
+    bootstrapFiles:
+        - ../../bootstrap-phpstan.php
+    universalObjectCratesClasses:
+        - Piwik\Config
+        - Piwik\View
+        - Piwik\ViewDataTable\Config
+    scanDirectories:
+        - ../../plugins/
