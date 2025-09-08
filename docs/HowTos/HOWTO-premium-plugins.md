@@ -18,11 +18,11 @@ The `config.ini.php` file has two lists of plugins under two different headings.
 
 In the end, the premium plugin installation is a two-pass process.
 
-## Process
+## Process to Install New Premium Plugin
 
 ### High level overview
 
-1. Install license key (via UI or CLI) so that it is in the database (this apparently only needs to be done once as all future premium plugins get linked to the same license key).
+1. Install license key (via UI or CLI) so that it is in the database (this only needs to be done once as all future premium plugins get linked to the same license key).
 2. Go through a dev -> stage -> prod deployment cycle of the container to install the plugin folder(s) into the container
 3. Activate the new plugin(s) (via UI or CLI) so that any database changes are properly executed.
 4. Go through a dev -> stage -> prod deployment cycle of the container to match the updated `config.ini.php` file on the server.
@@ -41,7 +41,13 @@ According to the support team at Matomo, the premium license key can be installe
 
 This needs to be done once on each of the stage & prod instances of Matomo.
 
+**Note**: It is possible to add the license key to the Dev1 instance of Matomo for a short period of time for testing a new premium plugin without breaking either the Stage or Prod instances of Matomo. This is useful for the initial test of a new premium plugin.
+
 #### 2. Install the plugin files
+
+First, download the plugin source files from shop.matomo.org (use the username/password in the "Matomo Plugins" secret in LastPass to log in). Once the .zip files are downloaded, expand them and save them in the `files/` folder in this repository.
+
+Second, update the [Dockerfile](../../Dockerfile) with a new `COPY` command to copy the the plugin files to the correct directory in the image.
 
 In this phase, the files are installed in the container **but** no changes are made to the `config.ini.php` file. This will **not** activate the plugins, it will just make them visible in the UI.
 
@@ -62,3 +68,7 @@ It's also important to note that this `plugin:activate` command very likely make
 #### 4. Backfill this repo
 
 Update the `config.ini.php` file in this repo and go through another dev -> stage -> prod deployment to ensure that the repo code matches the container running in AWS.
+
+## Process to Upgrade Existing Premium Plugin
+
+See the [HOWTO-matomo-upgrade](./HOWTO-matomo-upgrade.md) documentation. Premium plug updates are the same as regular plugin updates.
