@@ -39,7 +39,6 @@ datatable_archiving_maximum_rows_events = 5000
 ; maximum number of rows for sub-tables of the Events tables (eg. for the subtables Categories>Actions or Categories>Names).
 datatable_archiving_maximum_rows_subtable_events = 100
 
-
 [mail]
 
 [Plugins]
@@ -104,6 +103,7 @@ Plugins[] = "CustomDimensions"
 Plugins[] = "FeatureFlags"
 Plugins[] = "MobileAppMeasurable"
 Plugins[] = "TagManager"
+Plugins[] = "CustomReports"
 Plugins[] = "CustomVariables"
 Plugins[] = "EnvironmentVariables"
 Plugins[] = "HeatmapSessionRecording"
@@ -185,6 +185,8 @@ PluginsInstalled[] = "VisitsSummary"
 PluginsInstalled[] = "WebsiteMeasurable"
 PluginsInstalled[] = "Widgetize"
 PluginsInstalled[] = "SearchEngineKeywordsPerformance"
+PluginsInstalled[] = "CustomReports"
+
 
 [HeatmapSessionRecording]
 add_tracking_code_only_when_needed = 1
@@ -197,3 +199,21 @@ default_heatmap_width = 1920
 UsersFlow_num_max_steps = 10
 UsersFlow_num_max_rows_in_actions = 100
 UsersFlow_num_max_links_per_interaction = 5000
+
+[CustomReports]
+custom_reports_validate_report_content_all_websites = 1
+custom_reports_always_show_unique_visitors = 0
+custom_reports_max_execution_time = 0
+custom_reports_disabled_dimensions = ""
+custom_reports_periods_force_aggregate_report_unique_metrics_evolution = ""
+custom_reports_max_dimensions = 3
+datatable_archiving_maximum_rows_custom_reports_dimensions_default = 50
+datatable_archiving_maximum_rows_subtable_custom_reports_dimensions_default = 10
+datatable_archiving_maximum_rows_custom_reports_dimensions_1 = 50
+datatable_archiving_maximum_rows_subtable_custom_reports_dimensions_1 = 10
+datatable_archiving_maximum_rows_custom_reports_dimensions_2 = 50
+datatable_archiving_maximum_rows_subtable_custom_reports_dimensions_2 = 10
+datatable_archiving_maximum_rows_custom_reports_dimensions_3 = 50
+datatable_archiving_maximum_rows_subtable_custom_reports_dimensions_3 = 10
+custom_reports_preview_report_timeframes = "-15 minutes,-1 hour,-3 hours,-6 hours"
+custom_reports_preview_report_min_rows_required = 3
