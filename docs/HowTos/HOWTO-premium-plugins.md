@@ -36,7 +36,7 @@ Before installing the license key, the *Marketplace* plugin must be activated. T
 According to the support team at Matomo, the premium license key can be installed in two instances of Matomo, "stage" and "prod." So, we can do some initial validation of a license key in Dev1, but the key cannot remain installed in the Dev1 instance. The license key installation can either be done by a user with "superuser" privileges in the Matomo web UI or it can be done by a member of InfraEng who has ssh access to the running container task/service. The CLI command is
 
 ```bash
-./console marketplace:set-license-key --license-key=LICENSE-KEY "<key>"
+./console marketplace:set-license-key --license-key=<license_key>
 ```
 
 This needs to be done once on each of the stage & prod instances of Matomo.
