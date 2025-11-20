@@ -1,4 +1,4 @@
-FROM matomo:5.5.1
+FROM matomo:5.5.2
   # checkov:skip=CKV_DOCKER_2:Skipping HEALTHCHECK configuration for now
   # checkov:skip=CKV_DOCKER_3:The container actually runs as www-data user
 
