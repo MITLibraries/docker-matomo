@@ -14,6 +14,9 @@ time_before_today_archive_considered_outdated = 1800
 enable_trusted_host_check=0
 
 proxy_client_headers[] = "HTTP_X_FORWARDED_FOR"
+proxy_scheme_headers[] = "HTTP_X_FORWARDED_PROTO"
+proxy_scheme_headers[] = "HTTP_X_FORWARDED_SCHEME"
+proxy_scheme_headers[] = "HTTP_X_URL_SCHEME"
 
 ; maximum number of rows for any of the Referers tables (keywords, search engines, campaigns, etc.), and Custom variables names
 datatable_archiving_maximum_rows_referrers = 5000

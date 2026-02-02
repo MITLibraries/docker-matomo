@@ -1,5 +1,7 @@
 # Premium Plugins
 
+Updated premium plugins can be downloaded from [matomo on-premise marketplaces](https://shop.matomo.org). See LastPass for credentials.
+
 Premium plugins are those that require a license key. In our docker-ized implementation of Matomo, this gets tricky.
 
 After some initial testing in Dev1, it's not as simple as just dumping the new plugin into the container and redeploying because of the following reasons.

@@ -1,0 +1,31 @@
+{
+    "name": "CustomReports",
+    "description": "Pull out the information you need in order to be successful. Develop your custom strategy to meet your individualized goals while saving money & time.",
+    "version": "5.4.9",
+    "theme": false,
+    "require": {
+        "matomo": ">=5.0.0-rc5,<6.0.0-b1"
+    },
+    "authors": [
+        {
+            "name": "InnoCraft",
+            "email": "contact@innocraft.com",
+            "homepage": "https:\/\/www.innocraft.com"
+        }
+    ],
+    "price": {
+        "base": 220
+    },
+     "preview": {
+       "video_url": "https://www.youtube-nocookie.com/embed/Ss0jtGLaeDM",
+       "demo_url": "https://demo.matomo.cloud/index.php?module=CoreHome&action=index&idSite=1&period=day&date=yesterday#?idSite=1&period=day&date=yesterday&segment=&category=CustomReports_CustomReports&subcategory=2"
+    },
+    "homepage": "https:\/\/www.innocraft.com",
+    "license": "InnoCraft EULA",
+    "keywords": [
+        "custom",
+        "reports",
+        "filter",
+        "segment"
+    ]
+}

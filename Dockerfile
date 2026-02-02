@@ -1,4 +1,4 @@
-FROM matomo:5.5.2
+FROM matomo:5.7.0
   # checkov:skip=CKV_DOCKER_2:Skipping HEALTHCHECK configuration for now
   # checkov:skip=CKV_DOCKER_3:The container actually runs as www-data user
 
@@ -9,16 +9,16 @@ COPY ./files/plugin-EnvironmentVariables-5.0.3/ /var/www/html/plugins/Environmen
 COPY ./files/plugin-CustomVariables-5.0.4/ /var/www/html/plugins/CustomVariables
 
 # Add the HeatmapSessionRecording plugin
-COPY ./files/plugin-HeatmapSessionRecording-5.3.1/ /var/www/html/plugins/HeatmapSessionRecording
+COPY ./files/plugin-HeatmapSessionRecording-5.3.3/ /var/www/html/plugins/HeatmapSessionRecording
 
 # Add the UsersFlow plugin
-COPY ./files/plugin-UsersFlow-5.0.6/ /var/www/html/plugins/UsersFlow
+COPY ./files/plugin-UsersFlow-5.0.7/ /var/www/html/plugins/UsersFlow
 
 # Add the SearchEngineKeywordsPerformance plugin
-COPY ./files/plugin-SearchEngineKeywordsPerformance-5.0.23/ /var/www/html/plugins/SearchEngineKeywordsPerformance
+COPY ./files/plugin-SearchEngineKeywordsPerformance-5.0.26/ /var/www/html/plugins/SearchEngineKeywordsPerformance
 
 # Add the CustomReports plugin
-COPY ./files/plugin-CustomReports-5.4.5/ /var/www/html/plugins/CustomReports
+COPY ./files/plugin-CustomReports-5.4.9/ /var/www/html/plugins/CustomReports
 
 # Our custom configuration settings.
 COPY ./files/config.ini.php /var/www/html/config/config.ini.php
