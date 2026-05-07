@@ -15,7 +15,7 @@ on:
 jobs:
   deploy:
     name: Prod Container Promote
-    uses: mitlibraries/.github/.github/workflows/ecr-shared-promote-prod.yml@INFRA-526
+    uses: mitlibraries/.github/.github/workflows/ecr-shared-promote-prod.yml@main
     secrets: inherit
     with:
       AWS_REGION: "us-east-1"
