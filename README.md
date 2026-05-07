@@ -49,9 +49,16 @@ The remainder of the configuration values should be set by modifying the [config
 
 #### [Plugins] and [PluginsInstalled]
 
-The `[Plugins]` section tells Matomo which plugins to enable on installation. To disable a plugin, simply remove it from this section. Our preference is to modify this section and not the `PluginsInstalled` section, as removing a plugin from `PluginsInstalled` would remove it from the application completely. While plugins can get installed in the container build, they are not automatically activated. There are two activation methods that can be used: via the web UI or via the CLI. See [Install a new plugin](https://matomo.org/faq/plugins/faq_21/) in the official Matomo documentation.
+The `[Plugins]` section tells Matomo which plugins to enable on installation. To disable a plugin, simply remove it from this section. Our preference is to modify this section and not the `PluginsInstalled` section, as removing a plugin from `PluginsInstalled` would remove it from the application completely. While plugins can get installed in the container build, they are not automatically activated. There are two activation methods that can be used: via the web UI or via the CLI. See [Install a new plugin](https://matomo.org/faq/plugins/faq_21/) or [How do I upgrade an installed plugin?](https://matomo.org/faq/on-premise/how-do-i-upgrade-an-installed-plugin/) in the official Matomo documentation.
 
 Any time plugins are installed/removed, it is imperative to capture a backup of the `config.ini.php` file (via the EFS partition) before launching the updated container and then compare it to the `config.ini.php` file after verifying that the plugin is activated. This is one of the few situations where the Matomo application might update/overwrite the `config.ini.php` file.
+
+#### Current Plugins
+* [Custom Reports](https://plugins.matomo.org/CustomReports) version 5.4.10
+* [Custom Variables](https://plugins.matomo.org/CustomVariables) version 5.0.6 Note: This is the last version of this plugin as it is no longer under development.  Future updates should use [Custom Dimensions](https://matomo.org/docs/custom-dimensions/)
+* [Heatmap & Session Recording](https://plugins.matomo.org/HeatmapSessionRecording) version 5.3.5
+* [Search Engine Keywords](https://plugins.matomo.org/SearchEngineKeywordsPerformance) version 5.0.29
+* [Users Flow](https://plugins.matomo.org/UsersFlow) version 5.0.9
 
 #### [Mail]
 
@@ -97,7 +104,7 @@ See the official [Recover from lost 2FA](https://matomo.org/faq/how-to/faq_27248
 
 * Owner: See [CODEOWNERS](./.github/CODEOWNERS)
 * Team: See [CODEOWNERS](./.github/CODEOWNERS)
-* Last Maintenance: 2025-05
+* Last Maintenance: 2026-05
 * External Documentation:
   * [MIT Libraries dev docs](https://mitlibraries.github.io/guides/misc/matomo.html) - includes information about setting up a website for tracking in Matomo.
   * [Matomo help center](https://matomo.org/help/) - offical Matomo docs. Includes user guide, developer guide, FAQ, and community support forum.

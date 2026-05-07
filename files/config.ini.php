@@ -1,5 +1,6 @@
 ; <?php exit; ?> DO NOT REMOVE THIS LINE
-; file automatically generated or modified by Matomo; you can manually override the default values in global.ini.php by redefining them in this file.
+; file automatically generated or modified by Matomo; you can manually override the default values in global.ini.php by
+redefining them in this file.
 [database]
 schema = Mariadb
 charset = utf8mb4
@@ -7,21 +8,20 @@ collation = utf8mb4_general_ci
 
 [General]
 ; disable browser-triggered archiving and expire archives in 30 minutes
-browser_archiving_disabled_enforce = 1 
+browser_archiving_disabled_enforce = 1
 time_before_today_archive_considered_outdated = 1800
 
 ; for now, disable host checking since we are behind ALB that does host checking for us
 enable_trusted_host_check=0
 
 proxy_client_headers[] = "HTTP_X_FORWARDED_FOR"
-proxy_scheme_headers[] = "HTTP_X_FORWARDED_PROTO"
-proxy_scheme_headers[] = "HTTP_X_FORWARDED_SCHEME"
-proxy_scheme_headers[] = "HTTP_X_URL_SCHEME"
 
-; maximum number of rows for any of the Referers tables (keywords, search engines, campaigns, etc.), and Custom variables names
+; maximum number of rows for any of the Referers tables (keywords, search engines, campaigns, etc.), and Custom variable
+s names
 datatable_archiving_maximum_rows_referrers = 5000
 
-; maximum number of rows for any of the Referers subtable (search engines by keyword, keyword by campaign, etc.), and Custom variables values
+; maximum number of rows for any of the Referers subtable (search engines by keyword, keyword by campaign, etc.), and Cu
+stom variables values
 datatable_archiving_maximum_rows_subtable_referrers = 5000
 
 ; maximum number of rows for the User ID report
@@ -39,8 +39,10 @@ datatable_archiving_maximum_rows_site_search = 5000
 ; maximum number of rows for any of the Events tables (Categories, Actions, Names)
 datatable_archiving_maximum_rows_events = 5000
 
-; maximum number of rows for sub-tables of the Events tables (eg. for the subtables Categories>Actions or Categories>Names).
+; maximum number of rows for sub-tables of the Events tables (eg. for the subtables Categories>Actions or Categories>Nam
+es).
 datatable_archiving_maximum_rows_subtable_events = 100
+
 
 [mail]
 
