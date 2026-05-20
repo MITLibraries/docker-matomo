@@ -14,9 +14,9 @@ jobs:
     secrets: inherit
     with:
       AWS_REGION: "us-east-1"
-      GHA_ROLE_STAGE: "docker-matomo-gha-prod"
+      GHA_ROLE_STAGE: "docker-matomo-gha-stage"
       GHA_ROLE_PROD: "docker-matomo-gha-prod"
-      ECR_STAGE: "docker-matomo-prod"
+      ECR_STAGE: "docker-matomo-stage"
       ECR_PROD: "docker-matomo-prod"
       # DEFAULT_BRANCH: # Only if the default branch is not "main"!
       # FUNCTION: "" # only if this is a container-based Lambda function
