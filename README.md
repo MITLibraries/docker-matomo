@@ -104,7 +104,7 @@ See the official [Recover from lost 2FA](https://matomo.org/faq/how-to/faq_27248
 
 * Owner: See [CODEOWNERS](./.github/CODEOWNERS)
 * Team: See [CODEOWNERS](./.github/CODEOWNERS)
-* Last Maintenance: 2026-05
+* Last Maintenance: 2026-06
 * External Documentation:
   * [MIT Libraries dev docs](https://mitlibraries.github.io/guides/misc/matomo.html) - includes information about setting up a website for tracking in Matomo.
   * [Matomo help center](https://matomo.org/help/) - offical Matomo docs. Includes user guide, developer guide, FAQ, and community support forum.
