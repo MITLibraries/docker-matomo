@@ -1,0 +1,10 @@
+<p style="margin-top:2em;margin-bottom:2em" class=" alert-info alert">
+    {% if not hasAdminPriviliges %}
+        Did you know?<br/>
+        An Admin or Super User can Configure Search Performance to import all your search keywords into Matomo.
+    {% else %}
+        Did you know?<br/>
+        You can <a href="{{ linkTo({'module': 'SearchEngineKeywordsPerformance', 'action': 'index'}) }}">Configure
+            Search Performance</a> to import all your search keywords into Matomo.
+    {% endif %}
+</p>

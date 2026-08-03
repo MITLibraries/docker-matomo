@@ -1,0 +1,12 @@
+{
+    "CustomReports": {
+        "Category": "分類",
+        "ErrorNotAnArray": "「%1$s」必須是陣列。",
+        "ErrorXNotProvided": "請輸入「%1$s」的值。",
+        "ErrorXNotWhitelisted": "「%1$s」的值不允許，使用以下其一：%2$s。",
+        "ErrorXTooLong": "「%1$s」過長，最多允許 %2$s 個字元。",
+        "Filter": "過濾",
+        "UpdatingData": "數據更新中…",
+        "ViewReportInfo": "查看報表"
+    }
+}

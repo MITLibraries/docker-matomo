@@ -1,0 +1,32 @@
+{% extends 'admin.twig' %}
+
+{% set title %}{{ 'SearchEngineKeywordsPerformance_SearchEngineKeywordsPerformance'|translate }}{% endset %}
+
+{% block content %}
+
+    <div
+        vue-entry="SearchEngineKeywordsPerformance.GoogleConfiguration"
+        configured-measurables="{{ configuredMeasurables|default({})|json_encode }}"
+        is-client-configured="{{ isClientConfigured|default(null)|json_encode }}"
+        is-client-configurable="{{ isClientConfigurable|default(null)|json_encode }}"
+        is-o-auth-configured="{{ isOAuthConfigured|default(null)|json_encode }}"
+        client-id="{{ clientId|default(null)|json_encode }}"
+        client-secret="{{ clientSecret|default(null)|json_encode }}"
+        accounts="{{ accounts|default({})|json_encode }}"
+        sites-infos="{{ sitesInfos|default({})|json_encode }}"
+        current-site="{{ currentSite|default(null)|json_encode }}"
+        url-options="{{ urlOptions|default({})|json_encode }}"
+        has-o-auth-error="{{ hasOAuthError|default(null)|json_encode }}"
+        auth-nonce="{{ auth_nonce|default(null)|json_encode }}"
+        form-nonce="{{ nonce|default(null)|json_encode }}"
+        add-google-site-config-nonce="{{ addGoogleSiteConfigNonce|default(null)|json_encode }}"
+        remove-google-site-config-nonce="{{ removeGoogleSiteConfigNonce|default(null)|json_encode }}"
+        remove-google-account-nonce="{{ removeGoogleAccountNonce|default(null)|json_encode }}"
+        count-of-accounts-with-access="{{ countOfAccountsWithAccess }}"
+        user-is-super-user="{{ userIsSuperUser }}"
+        configure-connection-props="{{ configureConnectionProps|json_encode }}"
+        extensions="{{ extensions|json_encode }}"
+        remove-config-url="{{ removeConfigUrl }}"
+    ></div>
+
+{% endblock %}

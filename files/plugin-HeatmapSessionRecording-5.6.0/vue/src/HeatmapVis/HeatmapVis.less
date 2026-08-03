@@ -1,0 +1,925 @@
+.heatmapVis {
+
+    > p {
+        margin: 0 0 8px;
+        padding-bottom: 0;
+    }
+
+    .aboveFoldLine {
+        border-top: 2px dashed orange;
+        height: 0;
+        position: absolute;
+
+        // Label pill vertically centered on the line (as in the mock): sitting
+        // on the line rather than under it keeps it inside the container's
+        // overflow clip when the fold is near the page bottom.
+        div {
+            // Fixed white, not a theme token: the pill floats over the
+            // recorded page (theme-independent, usually white), like the
+            // hover tooltip's fixed black. The mock shows a light chip with
+            // the dashes stopping at its edges.
+            background: #fff;
+            border: 1px solid orange;
+            border-radius: 4px;
+            color: orange;
+            font-size: 12px;
+            left: 8px;
+            padding: 1px 8px;
+            position: absolute;
+            top: 0;
+            // Counter-scales the pill against the preview's fit-to-width
+            // scaling so the label stays readable at full size; the escape
+            // keeps the LESS compiler from evaluating the calc() division.
+            transform: ~"translateY(-50%) scale(calc(1 / var(--preview-scale, 1)))";
+            transform-origin: left center;
+            white-space: nowrap;
+        }
+    }
+
+    .heatmapReportLayout {
+        align-items: flex-start;
+        display: flex;
+        gap: 16px;
+    }
+
+    // The recording's card: hugs the (scaled) snapshot's width, so the
+    // summary card sits directly to its right and free space stays on the
+    // row's right edge (Product round 5). Previews wider than the row can
+    // accommodate scale down so the summary card always fits beside them;
+    // the stacked (narrow) layout stretches the frame instead.
+    .heatmapScrollArea {
+        background: @theme-color-background-contrast;
+        border: 1px solid @theme-color-border;
+        // 8px per the Figma radius for cards/buttons (the toolbar pills use the
+        // same). Content clips to the rounded padding box, so a flush preview's
+        // corners are shaved by the frame's curve, as in the mock.
+        border-radius: 8px;
+        flex: 0 1 auto;
+        min-width: 0;
+        // Both axes: a preview taller than the JS-computed max-height (bound
+        // inline) scrolls vertically inside the frame instead of growing the
+        // report card past the bottom of the window.
+        overflow: auto;
+        // Positioning context for the loading overlay, which fills the frame.
+        position: relative;
+        // Reserve the vertical scrollbar's gutter so it doesn't carve into
+        // the content-hugging width and cause a phantom horizontal scrollbar
+        // (older browsers without support fall back to a small overlap).
+        scrollbar-gutter: stable;
+
+        // Native square scrollbars and their corner filler overpaint the
+        // frame's rounded corners. Thin rounded thumbs on a transparent
+        // track, with track margins keeping the bar ends clear of the curves.
+        scrollbar-color: @theme-color-border transparent; // Firefox
+        scrollbar-width: thin; // Firefox
+
+        &::-webkit-scrollbar {
+            height: 10px;
+            width: 10px;
+        }
+
+        &::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: @theme-color-border;
+            // Transparent border + content-box clip inset the thumb from the
+            // frame edge without a visible track.
+            background-clip: content-box;
+            border: 2px solid transparent;
+            border-radius: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            margin: 8px;
+        }
+    }
+
+    // No snapshot: widen the empty/deleted-state card to roughly the toolbar's
+    // legend edge (an approximate fixed width, per Product) so it doesn't look
+    // cramped. Scoped to the empty variant so the populated card still hugs its
+    // snapshot; max-width keeps it from overflowing on narrow/stacked layouts.
+    .heatmapScrollAreaEmpty {
+        max-width: 100%;
+        width: 1065px;
+    }
+
+    // Sized to the iframe via an inline width binding. Keep this element (not
+    // the scroll area) as the ref target and positioning context: the heatmap
+    // canvas, highlight, fold line and scroll-heatmap leaves are absolutely
+    // positioned on the assumption its origin is the iframe's top-left corner.
+    // Sized by the component to the preview's scaled dimensions (a transform
+    // doesn't change layout, so this box reserves the scaled footprint);
+    // centers previews narrower than the viewing area.
+    .heatmapScaleBox {
+        margin: 0 auto;
+    }
+
+    .iframeRecordingContainer {
+        // Hairline for the recorded page's edge where it is letterboxed on the
+        // gray field. A shadow ring adds no layout width (keeping overlay and
+        // scroll geometry exact); at flush edges it is clipped by the scroll
+        // area, whose own border sits in the identical spot — so it must stay
+        // the same color as the scroll area border.
+        box-shadow: 0 0 0 1px @theme-color-border;
+        // Overlays are sized to the iframe, but #heatmapContainer starts out
+        // with a static 1000px width until initHeatmap resizes it; without
+        // clipping, that stray width gives the scroll area phantom scrollable
+        // space next to previews narrower than 1000px.
+        overflow: hidden;
+        position: relative;
+
+        #recordingPlayer {
+            // The page edge is the container's hairline ring; the iframe's own
+            // border would double it, and the inline baseline gap would leave
+            // a sliver of the gray field inside the ring's bottom edge.
+            border: 0;
+            display: block;
+        }
+    }
+
+    // Loading overlay: fills the whole recording frame (not just the iframe
+    // region) with a centered spinner + label while the heatmap fetches and
+    // renders. Sits above the preview via z-index.
+    .heatmapLoadingOverlay {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        inset: 0;
+        justify-content: center;
+        position: absolute;
+        z-index: 2;
+
+        // Translucent dim matching the element-hover highlight (#highlightDiv):
+        // a 50% veil so the heatmap stays visible underneath and switching
+        // device/type isn't jarring. Fixed color, like the other overlays that
+        // float over the (theme-independent) recorded page.
+        &::before {
+            background-color: #424242;
+            content: "";
+            inset: 0;
+            opacity: 0.5;
+            position: absolute;
+        }
+
+        // Keep the spinner and label above the backdrop layer.
+        > * {
+            position: relative;
+        }
+    }
+
+    .heatmapLoadingSpinner {
+        animation: heatmapSettingsSpin 0.8s linear infinite;
+        // Light track + teal arc, both readable on the dark veil. Teal via the
+        // same new-brand token the empty-state icon uses, so it matches the
+        // design and adapts to light/dark (falls back to the icon's teal on
+        // Matomo versions before the token existed).
+        border: 3px solid rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        border-top-color: ~"var(--theme-color-new-brand, #00b4be)";
+        height: 40px;
+        width: 40px;
+    }
+
+    .heatmapLoadingTitle {
+        // White reads on the dark veil in both themes (as the old overlay did).
+        color: #fff;
+        font-size: 18px;
+    }
+
+    .heatmapSummaryCard {
+        flex: 0 0 310px;
+        border: 1px solid @theme-color-border;
+        // Core .card margins are for document flow; inside the flex row they
+        // push the card below the frame's top edge and pad the row's bottom,
+        // breaking the viewport-fit height. The row's gap owns the spacing.
+        margin: 0;
+
+        // Section headings ("Recordings", "Top clicked elements", "Scroll reach").
+        .card-title {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        // Reusable Morpheus/Materialize divider separating the summary sections.
+        // Raw var() with fallback because @theme-color-border-alternative only
+        // exists as a LESS variable from Matomo 5.11; referencing it directly
+        // would fail CSS compilation on older supported versions.
+        .divider {
+            margin: 16px 0;
+            background: ~"var(--theme-color-border-alternative, var(--theme-color-border))";
+            opacity: 0.5;
+        }
+    }
+
+    .recordingsValue {
+      margin-top: -8px;
+      padding-top: 0;
+      padding-bottom: 0;
+      font-size: 28px;
+    }
+
+    .recordingsEmpty {
+      margin-top: 12px;
+    }
+
+    // Currently selected device shown to the right of the "Recordings" title;
+    // regular weight per the mock, unlike the medium (500) percent labels.
+    .recordingsDeviceType {
+        color: @theme-color-text-lighter;
+        flex-shrink: 0;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    // Device split of all recorded samples: stacked bar + legend under the KPI.
+    .deviceBreakdown {
+        margin-top: 16px;
+    }
+
+    .deviceBreakdownBar {
+        border-radius: 4px;
+        display: flex;
+        height: 8px;
+        overflow: hidden;
+    }
+
+    // Per-device colors, shared by the bar segments and the legend swatches.
+    // They are fixed pastels from the Figma mock: no theme token matched
+    .deviceBreakdownDevice1 {
+        background: #cdf6f6;
+    }
+
+    .deviceBreakdownDevice2 {
+        background: #8dcaff;
+    }
+
+    .deviceBreakdownDevice3 {
+        background: #ffdebc;
+    }
+
+    .deviceBreakdownLegend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        justify-content: space-between;
+        margin-top: 12px;
+    }
+
+    .deviceBreakdownLegendItem {
+        align-items: center;
+        display: flex;
+        gap: 6px;
+    }
+
+    .deviceBreakdownSwatch {
+        border-radius: 2px;
+        flex-shrink: 0;
+        height: 8px;
+        width: 8px;
+    }
+
+    .deviceBreakdownLegendLabel, .deviceBreakdownLegendPercentLabel {
+        color: @theme-color-text-lighter;
+        font-size: 12px;
+    }
+
+    .deviceBreakdownLegendPercentLabel {
+        font-weight: 500;
+    }
+
+    // Left labels are normal weight / 12px; percentages are medium (500) / 12px.
+    .topClickedElementLabel,
+    .scrollReachLabel,
+    .topClickedElementPercent,
+    .scrollReachPercent {
+        font-size: 12px;
+        color: @theme-color-text-lighter;
+    }
+
+    .topClickedElementPercent {
+        flex-shrink: 0;
+        font-weight: 500;
+        min-width: 42px;
+        text-align: right;
+    }
+
+    // Label + bar stacked on the left; the percent is a right column centered
+    // against the whole stack, mirroring the scroll-reach row geometry.
+    .topClickedElementRow {
+        align-items: center;
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+    }
+
+    .topClickedElementContent {
+        flex: 1 1 auto;
+        // Allows the label to shrink/truncate inside the flex row instead of
+        // pushing the percent column out of alignment.
+        min-width: 0;
+    }
+
+    .topClickedElementRow:first-child {
+        margin-top: 0;
+    }
+
+    .topClickedElementBarRow {
+        margin-top: 6px;
+    }
+
+    .topClickedElementBar {
+        // -base rather than -tinyContrast: tinyContrast is nearly invisible
+        // against the card background in dark mode.
+        background: @theme-color-background-base;
+        border-radius: 4px;
+        flex: 1 1 auto;
+        height: 8px;
+        overflow: hidden;
+    }
+
+    .topClickedElementBarFill {
+        // New brand teal. Raw var() with fallback because @theme-color-new-brand
+        // only exists as a LESS variable from Matomo 5.12; the fallback matches
+        // its value so the bars render the same on older supported versions.
+        background: ~"var(--theme-color-new-brand, #00b4be)";
+        height: 100%;
+    }
+
+    .recordingsHeader,
+    .scrollReachHeader {
+        // Center, not baseline: Figma vertically centers the 12px right-hand
+        // labels against the 18px section titles.
+        align-items: center;
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+        margin-bottom: 16px;
+
+        .card-title {
+            // Flex centers margin boxes, so the title's own section spacing
+            // (moved to the header row above) would sink the right-hand label
+            // 8px below the title's visual center.
+            margin-bottom: 0;
+        }
+    }
+
+    .scrollReachAvgFold {
+        color: @theme-color-text-lighter;
+        font-weight: 500;
+        flex-shrink: 0;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    // Single-line rows (label, bar, percent); the bar reuses .topClickedElementBar*.
+    .scrollReachRow {
+        align-items: center;
+        display: flex;
+        gap: 8px;
+        // The Figma spec's 20px is measured between the edges of consecutive
+        // bars, not between row boxes: 12px row margin + the overhang of the
+        // 16px-line-height labels around the 8px bar gives exactly 20px.
+        margin-top: 12px;
+    }
+
+    .scrollReachRow:first-child {
+        margin-top: 0;
+    }
+
+    .scrollReachLabel,
+    .scrollReachPercent {
+        // Pinned so the bar-to-bar spacing computed in .scrollReachRow holds
+        // regardless of the inherited line-height.
+        line-height: 16px;
+        min-width: 42px;
+    }
+
+    .scrollReachPercent {
+        font-weight: 500;
+        text-align: right;
+    }
+
+    .numSamples {
+        position: relative;
+        top: -2px;
+    }
+
+    .heatmapActionButtons {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 2rem;
+
+        .heatmapExportAction {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .loadingPiwik {
+            margin: 0;
+        }
+    }
+
+    .customIframeWidth {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .customIframeWidthLabel {
+            white-space: nowrap;
+            color: @theme-color-text-lighter;
+            font-size: 13px;
+        }
+
+        .matomo-form-field {
+            margin: 0;
+
+            .col {
+                padding: 0;
+            }
+        }
+
+        .select-wrapper {
+            position: relative;
+            // Sized to the longest option ("1920px" ≈ 7ch, with headroom for
+            // custom widths) plus the pill's padding and caret zone: the
+            // materialize select renders as a text input, which has no
+            // intrinsic option-based width to size to.
+            // (escaped: LESS otherwise computes 7ch + 38px itself as 45ch)
+            width: calc(~"7ch + 38px");
+            box-sizing: border-box;
+            border: 1px solid @theme-color-border;
+            border-radius: 8px;
+            background-color: @theme-color-background-contrast;
+
+            &:hover {
+                background-color: @theme-color-background-base;
+            }
+
+            input.select-dropdown {
+                box-sizing: border-box;
+                width: 100%;
+                height: 36px;
+                margin: 0;
+                padding: 0 26px 0 12px;
+                border: none;
+                border-radius: 8px;
+                background-color: transparent;
+                color: @theme-color-text;
+                font-size: 13px;
+                line-height: 36px;
+
+                &:focus {
+                    border: none;
+                }
+            }
+
+            // hide Materialize's default triangle caret in favour of a
+            // chevron matching the site selector pill
+            .caret {
+                display: none;
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                right: 12px;
+                width: 6px;
+                height: 6px;
+                margin-top: -4px;
+                border-right: 1.5px solid @theme-color-text;
+                border-bottom: 1.5px solid @theme-color-text;
+                transform: rotate(45deg);
+                pointer-events: none;
+            }
+        }
+    }
+
+    .heatmapTile {
+        width: 100%;
+    }
+
+    .heatmapWrapper {
+        position: absolute;
+
+        #heatmapContainer {
+            position:absolute;
+            width: 1000px;
+            height: 1000px;
+        }
+    }
+
+    .heatmapSelection {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px 24px;
+        margin-bottom: 20px;
+
+        .input-field {
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+
+        .hsrToggle {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px;
+            border: 1px solid @theme-color-border;
+            border-radius: 8px;
+            background-color: @theme-color-background-contrast;
+        }
+
+        .hsrToggleBtn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 15px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            background-color: transparent;
+            color: @theme-color-text;
+            font-size: 13px;
+            line-height: 1;
+            white-space: nowrap;
+            cursor: pointer;
+
+            img {
+                display: block;
+            }
+
+            &:hover {
+                background-color: @theme-color-background-base;
+            }
+
+            &.active {
+                color: @theme-color-link;
+                border-color: @theme-color-link;
+                background-color: color-mix(in srgb, @theme-color-link 8%, transparent);
+                cursor: default;
+            }
+        }
+
+        .deviceResolution {
+            color: @theme-color-text-lighter;
+        }
+
+        .hsrToggleBtn.active .deviceResolution {
+            color: @theme-color-link;
+        }
+    }
+
+    // In the toolbar row's normal flow (left-aligned after the controls);
+    // the row's gap provides the spacing.
+    .legendOuter {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .legendLabel {
+            color: @theme-color-text-lighter;
+            font-size: 13px;
+        }
+
+        .legend-area {
+            display: flex;
+
+            .gradient {
+                display: block;
+                width: 130px;
+                height: 10px;
+                border-radius: 5px;
+            }
+        }
+    }
+
+    #highlightDiv {
+        position: absolute;
+        background-color: #424242;
+        opacity: 0.5;
+        z-index: 999;
+        pointer-events: none;
+    }
+}
+
+.heatmap-vis-title {
+    .title {
+        color: @theme-color-headline-alternative !important;
+    }
+}
+
+// Title on the left, the settings menu button on the right (as in the mock).
+// Center vertically so the button lines up with the title text: the title h2
+// carries symmetric vertical padding (Morpheus base), so flex-start would sit
+// the button above the text.
+.heatmapReportHeader {
+    align-items: center;
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+}
+
+.heatmapSettingsDropdown {
+    flex-shrink: 0;
+
+    // The core dropdown reserves 14px on its right for the reporting-menu layout
+    // we don't use; drop it so the button sits flush with the report's right edge.
+    // position:relative anchors the absolutely-positioned pane to the button so it
+    // can be right-aligned below it (see .items) rather than overflowing the screen.
+    .menuDropdown {
+        padding-right: 0;
+        position: relative;
+    }
+
+    // Present the reporting-menu dropdown as a bordered settings button per the mock.
+    .menuDropdown .title {
+        align-items: center;
+        background-color: @theme-color-background-contrast;
+        border: 1px solid @theme-color-border;
+        border-radius: 8px;
+        display: inline-flex;
+        font-size: 14px;
+        gap: 8px;
+        padding: 8px 12px;
+
+        // The settings trigger is a self-contained button, not an expandable
+        // reporting-menu entry, so the sub-menu chevron would just be noise.
+        .icon-chevron-down {
+            display: none;
+        }
+
+        // The gear/spinner + label are injected together into core's .title-label;
+        // flex it so the glyph is centered on the label (vertical-align:middle left
+        // it sitting low against this icon font). The literal space between glyph
+        // and text collapses inside the flex box, so gap sets their spacing.
+        .title-label {
+            align-items: center;
+            display: inline-flex;
+            gap: 8px;
+        }
+    }
+
+    // While an export runs, the trigger turns into a spinner + message and stops responding
+    // to clicks so the customer sees the (sometimes slow) export is in progress.
+    &.is-exporting .menuDropdown .title {
+        cursor: default;
+        opacity: 0.7;
+        pointer-events: none;
+    }
+
+    .heatmapSettingsSpinner {
+        animation: heatmapSettingsSpin 0.8s linear infinite;
+        border: 2px solid @theme-color-border;
+        border-radius: 50%;
+        border-top-color: @theme-color-text;
+        display: inline-block;
+        height: 14px;
+        width: 14px;
+    }
+
+    // Dropdown pane as a card containing pill-shaped items (per Figma): rounded,
+    // padded card with each item an inset rounded pill on hover.
+    .menuDropdown .items {
+        border: 1px solid @theme-color-border;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        // Anchor the pane to the button's right edge so it opens leftward and
+        // stays on screen (the button now sits flush against the report's edge).
+        left: auto;
+        // Sit the pane below the button with a small gap, like the core site selector.
+        // The pane is absolutely positioned with top:auto, so margin shifts it down.
+        margin-top: 6px;
+        padding: 6px !important;
+        right: 0;
+
+        .item {
+            border-radius: 6px;
+            // The edit item is an <a> (pointer by default); the export/delete items are
+            // <span>s, so set it explicitly to keep the cursor consistent across all items.
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 20px;
+            padding: 8px 12px !important;
+            white-space: nowrap;
+        }
+    }
+}
+
+// Centered icon + title + subtitle shown in the report frame when no snapshot exists.
+.heatmapEmptyState {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    // Even 16px rhythm between every item (icon, title, subtitle, snippet, button)
+    // per the Figma; individual item margins are zeroed so they don't double up.
+    gap: 16px;
+    justify-content: center;
+    min-height: 360px;
+    padding: 24px;
+    text-align: center;
+
+    .heatmapEmptyStateIcon {
+        align-items: center;
+        background-color: @theme-color-background-base;
+        border-radius: 50%;
+        color: @theme-color-text-lighter;
+        display: flex;
+        font-size: 28px;
+        height: 72px;
+        justify-content: center;
+        width: 72px;
+    }
+
+    .heatmapEmptyStateTitle {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .heatmapEmptyStateSubtitle {
+        color: @theme-color-text-lighter;
+        margin: 0;
+        max-width: 420px;
+        // Core gives report paragraphs a padding-bottom, which widened the gap to
+        // the snippet beyond the 16px rhythm; drop it so the flex gap owns spacing.
+        padding: 0;
+    }
+
+    // Hug the command instead of stretching across the (wide) card, and centre it.
+    // This element also receives core's .copyToClipboardWrapper class from the
+    // v-copy-to-clipboard directive, which absolutely positions the copy button.
+    .heatmapEmptyStateCodeWrapper {
+        // Pin the copy button's em-based size (core sizes it in em) so it doesn't
+        // balloon with whatever font-size it inherits here.
+        font-size: 13px;
+        margin: 0;
+        max-width: 100%;
+        position: relative;
+        width: fit-content;
+
+        // Core pins the button to the top-right, which overflowed this short
+        // single-line box; center it vertically within the box instead.
+        .copyToClipboardPositionDiv {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+
+    .heatmapEmptyStateCode {
+        align-items: center;
+        background-color: @theme-color-background-base;
+        border: 1px solid @theme-color-border;
+        border-radius: 4px;
+        color: @theme-color-text;
+        display: flex;
+        font-family: monospace;
+        font-size: 12px;
+        margin: 0;
+        // Just tall enough for the centered copy button, so the box hugs the
+        // single command line; the right padding keeps the button clear of it.
+        min-height: 40px;
+        overflow-x: auto;
+        padding: 0 52px 0 16px;
+        white-space: pre;
+    }
+
+    .heatmapEmptyStateGuide {
+        margin: 0;
+    }
+}
+
+// Delete / retake snapshot modal. modalConfirm appends the modal to <body>, so this is styled
+// at the top level (not under .heatmapVis) and scoped by the class passed via modalConfirm options.
+.heatmapDeleteModal {
+    // Match the report cards' 8px corners (Materialize modals default to a smaller radius).
+    border-radius: 8px;
+    // Wide enough for the two long retake buttons to sit side by side on one line at the
+    // 32px padding; capped so it still fits on smaller screens.
+    width: 704px;
+    max-width: 92%;
+
+    .modal-content {
+        // 32px around the text; the gap down to the buttons comes from the last
+        // paragraph's margin (below), so it stays a consistent 24px.
+        padding: 32px 32px 0;
+
+        // Core's .ui-confirm adds its own 20px 10px padding inside .modal-content;
+        // drop it so the modal's 32px is the only outer padding.
+        .ui-confirm {
+            padding: 0;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 24px;
+            // Left-aligned to match the design (core centers .ui-confirm titles).
+            text-align: left;
+        }
+
+        // 24px between the title and paragraphs, and from the last paragraph down
+        // to the button row (the footer adds no top padding of its own).
+        p {
+            margin: 0 0 24px;
+        }
+    }
+
+    // The default footer is a fixed 56px row that clips the two long retake buttons. Lay it out
+    // as an auto-height flex row, right-aligned with a 16px gap and kept on a single line
+    // (nowrap) so the two long buttons never stack.
+    .modal-footer {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 16px;
+        height: auto;
+        justify-content: flex-end;
+        // 32px sides/bottom to match the content; no top padding, so the 24px
+        // gap from the text above is owned by the last paragraph's margin.
+        padding: 0 32px 32px;
+
+        // Both actions render at the primary button's 14px; the flat button
+        // otherwise picks up a larger size than the solid .btn beside it.
+        // flex-shrink:0 keeps them at full width on one line (no squish/clip).
+        .btn,
+        .btn-flat {
+            flex-shrink: 0;
+            font-size: 14px;
+            // Materialize centers .btn but not .btn-flat, which would otherwise
+            // inherit the footer's text-align:right once it is wider than its label.
+            text-align: center;
+        }
+
+        // Outlined secondary action in the same brand color as the primary .btn,
+        // so they track each other in both themes
+        .btn-flat {
+            border: 1px solid @theme-color-brand;
+            border-radius: 3px;
+            color: @theme-color-brand;
+            text-decoration: none;
+
+            &:hover,
+            &:focus {
+                background-color: @theme-color-brand;
+                color: @theme-color-brand-contrast;
+            }
+        }
+    }
+}
+
+// On viewports too narrow for the modal (capped at 92% of the viewport) to fit both
+// retake buttons on one line, stack them full-width so they wrap cleanly instead of
+// overflowing the modal.
+@media (max-width: 720px) {
+    .heatmapDeleteModal .modal-footer {
+        flex-wrap: wrap;
+
+        .btn,
+        .btn-flat {
+            flex: 1 1 100%;
+        }
+    }
+}
+
+// The widgetized pop-out (Manage heatmaps → view) renders the report inside
+// Widgetize's bare `.widget` with no page gutter; the regular reporting page
+// gets its gutter from the page shell, so this must not apply there.
+.widgetized .heatmapVisPage {
+    padding: 16px;
+
+    // Dashboard's `.widget h2` rule (12px 10px 7px, meant for dashboard
+    // widget titles) leaks in here because the Widgetize iframe wraps the
+    // page in a bare `.widget`, pushing the headline out of line with the
+    // report content. Restore the regular page's h2 padding (Morpheus base)
+    // so the title aligns and spaces the same as on the reporting page.
+    .heatmap-vis-title {
+        padding: 16px 0;
+    }
+}
+
+@media (max-width: 900px) {
+    .heatmapVis {
+        // Stack by switching the flex row to a column: the row's gap keeps
+        // spacing the two surfaces. Margins can't be used for that here —
+        // core's `.reporting-page .isFirstWidgetInPage .card` zeroes the
+        // card's margin-top with higher specificity.
+        .heatmapReportLayout {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .heatmapSummaryCard {
+            width: 310px;
+        }
+    }
+}
+
+@keyframes heatmapSettingsSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}

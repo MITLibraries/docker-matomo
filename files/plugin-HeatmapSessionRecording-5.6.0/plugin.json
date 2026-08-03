@@ -1,0 +1,41 @@
+{
+    "name": "HeatmapSessionRecording",
+    "description": "Visualise behaviour with Heatmaps and replay recorded visitor sessions to identify friction, validate design decisions, and improve conversion paths.",
+    "version": "5.6.0",
+    "theme": false,
+    "require": {
+        "matomo": ">=5.0.0-rc1,<6.0.0-b1"
+    },
+    "authors": [
+        {
+            "name": "InnoCraft",
+            "email": "contact@innocraft.com",
+            "homepage": "https:\/\/www.innocraft.com"
+        }
+    ],
+    "price": {
+        "base": 220
+    },
+    "archive": {
+        "exclude": ["/tracker.js"]
+    },
+    "preview": {
+        "video_url": "https://www.youtube-nocookie.com/embed/WyDygNx0t4w"
+    },
+    "homepage": "https:\/\/www.heatmap-analytics.com",
+    "license": "InnoCraft EULA",
+    "keywords": [
+        "heatmap",
+        "session recording",
+        "session",
+        "recording",
+        "move",
+        "scroll",
+        "hover",
+        "click",
+        "user",
+        "visitor",
+        "video",
+        "visit"
+    ]
+}

@@ -1,0 +1,26 @@
+diff --git a/node_modules/html-to-image/es/clone-node.js b/node_modules/html-to-image/es/clone-node.js
+index 114cbf2..023d585 100644
+--- a/node_modules/html-to-image/es/clone-node.js
++++ b/node_modules/html-to-image/es/clone-node.js
+@@ -61,7 +61,7 @@ async function cloneChildren(nativeNode, clonedNode, options) {
+     }
+     else if (isInstanceOfElement(nativeNode, HTMLIFrameElement) &&
+         ((_a = nativeNode.contentDocument) === null || _a === void 0 ? void 0 : _a.body)) {
+-        children = toArray(nativeNode.contentDocument.body.childNodes);
++        children = [];
+     }
+     else {
+         children = toArray(((_b = nativeNode.shadowRoot) !== null && _b !== void 0 ? _b : nativeNode).childNodes);
+diff --git a/node_modules/html-to-image/lib/clone-node.js b/node_modules/html-to-image/lib/clone-node.js
+index 214f4d3..0f0555b 100644
+--- a/node_modules/html-to-image/lib/clone-node.js
++++ b/node_modules/html-to-image/lib/clone-node.js
+@@ -136,7 +136,7 @@ function cloneChildren(nativeNode, clonedNode, options) {
+                     }
+                     else if ((0, util_1.isInstanceOfElement)(nativeNode, HTMLIFrameElement) &&
+                         ((_a = nativeNode.contentDocument) === null || _a === void 0 ? void 0 : _a.body)) {
+-                        children = (0, util_1.toArray)(nativeNode.contentDocument.body.childNodes);
++                        children = [];
+                     }
+                     else {
+                         children = (0, util_1.toArray)(((_b = nativeNode.shadowRoot) !== null && _b !== void 0 ? _b : nativeNode).childNodes);

@@ -47,7 +47,7 @@ These instructions assume you are working in the **dev** environment.  Change to
 Often, an update to the version of Matomo will require an update to a plugin version. See below for an overview of the plugin update process.
 
 1. Ensure that an out-of-band backup of the current `config/config.ini.php` exists
-   * SSH (via AWSCLI + Session Manager) to the container(see the [Troubleshooting](./HOWTO-miscellaneous.md) section for the AWS CLI connection command).
+   * SSH (via AWSCLI + Session Manager) to the container (see the [Troubleshooting](./HOWTO-miscellaneous.md) section for the AWS CLI connection command).
    * Run `cp /var/www/html/config/* /mnt/efs/backup/config`
 1. Visit [Matomo plugins](https://plugins.matomo.org), select the correct version of Matomo, and then search for the plugins that are currently in use in our instance of Matomo.
    * If there is a newer version, download it from the site, unzip it, and store the unzipped folder in the [files/](../../files/) directory, following the naming convention in place (e.g., `plugin-<plugin_name>-<version>`)

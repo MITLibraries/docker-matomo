@@ -1,0 +1,31 @@
+{% extends 'admin.twig' %}
+
+{% set title %}{{ 'SearchEngineKeywordsPerformance_SearchEngineKeywordsPerformance'|translate }}{% endset %}
+
+{% block content %}
+
+    <div
+        vue-entry="SearchEngineKeywordsPerformance.YandexConfiguration"
+        is-client-configured="{{ isClientConfigured|default(null)|json_encode }}"
+        is-client-configurable="{{ isClientConfigurable|default(null)|json_encode }}"
+        is-o-auth-configured="{{ isOAuthConfigured|default(null)|json_encode }}"
+        client-id="{{ clientId|default(null)|json_encode }}"
+        client-secret="{{ clientSecret|default(null)|json_encode }}"
+        configured-measurables="{{ configuredMeasurables|default({})|json_encode }}"
+        sites-infos="{{ sitesInfos|default({})|json_encode }}"
+        current-site="{{ currentSite|default(null)|json_encode }}"
+        url-options="{{ urlOptions|default({})|json_encode }}"
+        has-o-auth-error="{{ hasOAuthError|default(null)|json_encode }}"
+        accounts="{{ accounts|default({})|json_encode }}"
+        auth_nonce="{{ auth_nonce|default(null)|json_encode }}"
+        form-nonce="{{ nonce|default(null)|json_encode }}"
+        add-yandex-site-config-nonce="{{ addYandexSiteConfigNonce|default(null)|json_encode }}"
+        remove-yandex-site-config-nonce="{{ removeYandexSiteConfigNonce|default(null)|json_encode }}"
+        remove-yandex-account-nonce="{{ removeYandexAccountNonce|default(null)|json_encode }}"
+        count-of-accounts-with-access="{{ countOfAccountsWithAccess }}"
+        user-is-super-user="{{ userIsSuperUser }}"
+        base-domain="{{ baseDomain }}"
+        base-domain-url="{{ baseUrl }}"
+    ></div>
+
+{% endblock %}
