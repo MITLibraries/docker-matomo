@@ -1,3 +1,14 @@
+# No ENV files
 .env
+
+# No VSCode files
+.vscode
+
+# No special macOS files
 **/.DS_Store
+
+# No temp directory
 temp/
+
+# No asdf files
+.tool-versions
