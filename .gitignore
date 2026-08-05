@@ -12,3 +12,6 @@ temp/
 
 # No asdf files
 .tool-versions
+
+# No cpu architecture temp file
+.arch_tag
