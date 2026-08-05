@@ -1,0 +1,124 @@
+h3.section-heading {
+  margin-top: 56px;
+}
+
+.oauth-step-card {
+  display: flex;
+  align-items: flex-start;
+  border: 1px solid @theme-color-border;
+  border-radius: 6px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+
+  .oauth-step-number {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    background: @color-green-matomo;
+    color: @theme-color-background-base;
+    font-weight: bold;
+    margin-right: 16px;
+  }
+
+  .oauth-step-body {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    .oauth-step-title {
+      margin: 2px 0 8px;
+      font-weight: bold;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    .btn {
+      margin-top: 4px;
+    }
+  }
+}
+
+.oauth-config-values {
+  border: 1px solid @theme-color-border;
+  border-radius: 6px;
+  padding: 4px 16px;
+  margin-bottom: 14px;
+
+  .oauth-config-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: none !important;
+    padding: 10px 32px 10px 0;
+
+    .oauth-config-label {
+      flex: 0 0 auto;
+      color: @theme-color-text-light;
+      margin-right: 16px;
+    }
+
+    .oauth-config-value {
+      flex: 1 1 auto;
+      min-width: 0;
+      width: auto;
+      max-width: none !important;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: @theme-color-text-light;
+      text-align: right;
+      white-space: normal;
+      word-break: break-all;
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    .copyToClipboardPositionDiv {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0;
+    }
+
+    .copyToClipboardButton,
+    .copyToClipboardButton:hover,
+    .copyToClipboardButton:focus {
+      position: static;
+      float: none;
+      min-width: 0;
+      max-width: none;
+      width: auto;
+      height: auto;
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+      background: none;
+      border: none;
+      border-radius: 0;
+      outline: none;
+      transition: none;
+    }
+
+    .copyToClipboardSpan,
+    .copyToClipboardCopiedDiv {
+      display: none !important;
+    }
+
+    .copyToClipboardIcon,
+    .copyToClipboardIconCheck {
+      float: none;
+      display: block;
+      margin: 0;
+      width: auto;
+      font-size: 1.3em;
+      color: @theme-color-text-light;
+      cursor: pointer;
+    }
+  }
+}

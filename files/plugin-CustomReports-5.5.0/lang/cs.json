@@ -1,0 +1,12 @@
+{
+    "CustomReports": {
+        "ErrorNotAnArray": "\"%1$s\" musí být pole.",
+        "ErrorXNotProvided": "Zadejte prosím hodnotu pro \"%1$s\".",
+        "ErrorXNotWhitelisted": "Hodnota pro \"%1$s\" není povolena, použijte jednu z: %2$s.",
+        "ErrorXTooLong": "\"%1$s\" je příliš dlouhé, max %2$s znaků je povoleno.",
+        "Filter": "Filtr",
+        "Unlock": "Odemknout",
+        "UpdatingData": "Aktualizuji data…",
+        "ViewReportInfo": "Zobrazit report"
+    }
+}

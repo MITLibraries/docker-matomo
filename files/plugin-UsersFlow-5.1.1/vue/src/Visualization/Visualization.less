@@ -1,0 +1,467 @@
+@_users-flow_color-node-fill: #e6f7f8;
+@_users-flow_color-node-fill-dark: #15555a;
+@_users-flow_color-node-accent: #00b4be;
+@_users-flow_color-node-accent-dark: #46c7cf;
+@_users-flow_color-flow: #00b4be;
+@_users-flow_color-flow-hover: #00b4be;
+@_users-flow_color-exit: #b9c0c7;
+@_users-flow_color-summary-fill: #f1f2f4;
+@_users-flow_color-summary-border: #b9c0c7;
+@_users-flow_color-button-add: #b9c0c7;
+@_users-flow_color-button-add-icon: #6f7981;
+@_users-flow_color-button-remove: #6f7981;
+
+@_users-flow_color-flow-dark: #3f8c91;
+@_users-flow_color-flow-hover-dark: #46c7cf;
+@_users-flow_color-exit-dark: #6f7981;
+@_users-flow_color-summary-fill-dark: #2e343a;
+@_users-flow_color-summary-border-dark: #5c656d;
+@_users-flow_color-value-dark: #46c7cf;
+@_users-flow_color-button-add-dark: #6f7981;
+@_users-flow_color-button-add-icon-dark: #a3abb2;
+@_users-flow_color-button-remove-dark: #a3abb2;
+
+.uiTest {
+    .piwikUsersFlowVisualization {
+        .sankeyChartOuter {
+            overflow: visible;
+        }
+    }
+
+    #widgetUsersFlowgetUsersFlow,
+    #widgetUsersFlowgetUsersFlow .card {
+        width: 4000px;
+    }
+}
+.reporting-page {
+    .piwikUsersFlowVisualization {
+        .sankeyChart {
+            margin-left: -3px;
+        }
+    }
+}
+body.widgetized {
+    .piwikUsersFlowVisualization {
+        margin-left: 10px;
+        margin-right: 10px;
+        .sankeyChart {
+            margin-left: -3px;
+        }
+    }
+    .usersFlowIntroduction {
+        margin: 10px;
+    }
+}
+
+.piwikUsersFlowVisualization {
+    .sankeyChart {
+        color: @theme-color-text;
+    }
+
+    .inDarkMode({
+        .node rect {
+            fill: @_users-flow_color-node-fill-dark;
+        }
+
+        .node .nodeAccent {
+            fill: @_users-flow_color-node-accent-dark;
+        }
+
+        .node.summaryNode rect {
+            fill: @_users-flow_color-summary-fill-dark;
+            stroke: @_users-flow_color-summary-border-dark;
+        }
+
+        .node.summaryNode .nodeAccent {
+            fill: @_users-flow_color-summary-border-dark;
+            stroke: none;
+        }
+
+        .node .nodeValue {
+            fill: @_users-flow_color-value-dark;
+            opacity: 1;
+        }
+
+        .link {
+            stroke: @_users-flow_color-flow-dark;
+            stroke-opacity: .4;
+        }
+
+        .nodeExit {
+            fill: @_users-flow_color-exit-dark;
+        }
+
+        .stepBarExits {
+            fill: @_users-flow_color-exit-dark;
+        }
+
+        .stepBarProceeded {
+            fill: @_users-flow_color-node-accent-dark;
+        }
+
+        .usersFlowLegend {
+            .colorBoxFlow {
+                background-color: @_users-flow_color-flow-dark;
+            }
+
+            .colorBoxExit {
+                background-color: @_users-flow_color-exit-dark;
+            }
+
+            .colorBoxOthers {
+                background-color: @_users-flow_color-summary-fill-dark;
+                border-color: @_users-flow_color-summary-border-dark;
+            }
+        }
+
+        .highlightedLink,
+        .link:not(.outNodeLink):hover {
+            stroke: @_users-flow_color-flow-hover-dark !important;
+        }
+
+        .addNewStepCircle {
+            stroke: @_users-flow_color-button-add-dark;
+        }
+
+        .addNewStep {
+            stroke: @_users-flow_color-button-add-icon-dark;
+        }
+
+        .addNewStepLabel {
+            fill: @_users-flow_color-button-add-icon-dark;
+        }
+
+        .addNewStepContainer:hover .addNewStepCircle {
+            fill: @_users-flow_color-summary-fill-dark;
+        }
+
+        .removeStep path {
+            fill: @_users-flow_color-button-remove-dark;
+        }
+    });
+
+    .sankeyChartOuter {
+        overflow: auto;
+    }
+
+    .exploringTraffic {
+        margin-bottom: 30px !important;
+    }
+
+    .userFlowSource,
+    .actionsPerStep,
+    .levelOfDetail {
+        .form-group {
+            margin: 0 !important;
+        }
+        width: 250px;
+        display: inline-block;
+    }
+
+    .usersFlowActionBar {
+        margin-left: -0.75rem;
+    }
+
+    .usersFlowLegend {
+        margin: 4px 0 16px;
+        color: @theme-color-text-light;
+
+        .items {
+            display: grid;
+            grid-template-columns: repeat(3, auto);
+            gap: 15px 25px;
+            justify-content: start;
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+
+            .colorBox {
+                width: 16px;
+                height: 16px;
+                flex-shrink: 0;
+                box-sizing: border-box;
+            }
+
+            .colorBoxFlow {
+                background-color: @_users-flow_color-flow;
+            }
+
+            .colorBoxExit {
+                background-color: @_users-flow_color-exit;
+            }
+
+            .colorBoxOthers {
+                background-color: @_users-flow_color-summary-fill;
+                border: 1px dashed @_users-flow_color-summary-border;
+            }
+        }
+
+        .text {
+            flex-grow: 1;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .title {
+            margin-left: 8px;
+        }
+    }
+
+    .linkDetail1 {
+        .linkSize1 {
+            display: none;
+        }
+        .linkSize2 {
+            display: none;
+        }
+        .linkSize3 {
+            display: none;
+        }
+        .linkSize4 {
+            display: none;
+        }
+        .linkSize5 {
+            display: none;
+        }
+    }
+
+    .linkDetail2 {
+        .linkSize1 {
+            display: none;
+        }
+        .linkSize2 {
+            display: none;
+        }
+        .linkSize3 {
+            display: none;
+        }
+        .linkSize4 {
+            display: none;
+        }
+    }
+
+    .linkDetail3 {
+        .linkSize1 {
+            display: none;
+        }
+        .linkSize2 {
+            display: none;
+        }
+        .linkSize3 {
+            display: none;
+        }
+    }
+
+    .linkDetail4 {
+        .linkSize1 {
+            display: none;
+        }
+        .linkSize2 {
+            display: none;
+        }
+    }
+
+    .linkDetail5 {
+        .linkSize1 {
+            display: none;
+        }
+    }
+
+    .depthContainerTitle {
+        font-weight:bold;
+        fill: currentColor;
+    }
+
+    .depthContainerVisits {
+        fill: @theme-color-text-light;
+    }
+
+    .stepBarExits {
+        fill: @_users-flow_color-exit;
+    }
+
+    .stepBarProceeded {
+        fill: @_users-flow_color-node-accent;
+    }
+
+    .stepMeta {
+        font: normal 12px Arial;
+        fill: @theme-color-text-light;
+    }
+
+    .depthContainerTitle,
+    .addNewStepContainer,
+    .addNewStep,
+    .removeStep {
+        cursor: pointer;
+    }
+
+    .addNewStepCircle {
+        fill: transparent;
+        stroke: @_users-flow_color-button-add;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-dasharray: 0.1 6;
+    }
+
+    .addNewStep {
+        fill: none;
+        stroke: @_users-flow_color-button-add-icon;
+        stroke-width: 2;
+        stroke-linecap: round;
+    }
+
+    .addNewStepLabel {
+        fill: @_users-flow_color-button-add-icon;
+        font: 500 13px Arial;
+    }
+
+    .addNewStepContainer:hover .addNewStepCircle {
+        fill: @_users-flow_color-summary-fill;
+    }
+
+    .removeStep path {
+        fill: @_users-flow_color-button-remove;
+    }
+
+    .link {
+        fill: none;
+        stroke: @_users-flow_color-flow;
+        stroke-opacity: .16;
+        transition: stroke-opacity .15s ease;
+    }
+
+    .link.outNodeLink {
+        display: none;
+    }
+
+    .nodeExit {
+        fill: @_users-flow_color-exit;
+    }
+
+    .highlightedLink,
+    .link:not(.outNodeLink):hover {
+        stroke-opacity: 1 !important;
+        stroke: @_users-flow_color-flow-hover !important;
+    }
+
+    // when a path is highlighted (hover or pinned), fade everything that is not
+    // part of it rather than outlining the selection
+    .usersFlowHasHighlight {
+        .link:not(.highlightedLink) {
+            stroke-opacity: .05;
+        }
+        .node:not(.highlightedNode) {
+            opacity: .25;
+        }
+    }
+
+    .node {
+        transition: opacity .15s ease;
+        &.outNode {
+            display: none;
+        }
+        rect {
+            cursor: pointer;
+            fill: @_users-flow_color-node-fill;
+            fill-opacity: 1;
+        }
+        .nodeAccent {
+            fill: @_users-flow_color-node-accent;
+        }
+        &.summaryNode rect {
+            fill: @_users-flow_color-summary-fill;
+            stroke: @_users-flow_color-summary-border;
+            stroke-width: 1;
+            stroke-dasharray: 4 3;
+        }
+        &.summaryNode .nodeAccent {
+            fill: @_users-flow_color-summary-border;
+            stroke: none;
+        }
+        text {
+            pointer-events: none;
+            font: normal 12px Arial;
+            fill: currentColor;
+        }
+        .nodeLabel {
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .nodeValue {
+            font-size: 12px;
+            opacity: .55;
+        }
+    }
+
+}
+
+.usersFlowPopupMenu {
+    position: absolute;
+    display: none;
+    border-radius: 3px;
+    font-size: 13px;
+    background-color: @theme-color-background-contrast;
+    border: 1px solid @theme-color-border;
+    min-width: 160px;
+    z-index:1500;
+
+    ul {
+        margin: 0;
+        list-style-type: none;
+        padding: 0;
+        cursor: default;
+        li {
+            cursor: pointer;
+            padding: 4px 16px;
+
+            a {
+                color: @theme-color-text;
+                text-decoration: none;
+            }
+
+            &:not(.divider):hover a,
+            &:not(.divider):hover {
+                background-color: @theme-color-link;
+                color: @theme-color-background-lowContrast;
+                text-decoration: none;
+            }
+        }
+    }
+
+    .divider {
+        cursor: default;
+        padding: 0;
+        border: 0;
+        height: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        background-color: @theme-color-background-contrast;
+    }
+}
+
+.userFlowNodeTooltip {
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: normal;
+
+    .nodeTooltipVisits {
+        color: @theme-color-text;
+    }
+
+    .nodeTooltipProceeded {
+        color: #0a8f99;
+    }
+
+    .nodeTooltipExits {
+        color: #e35d52;
+    }
+
+}

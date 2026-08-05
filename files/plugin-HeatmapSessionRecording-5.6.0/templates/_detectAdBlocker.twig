@@ -1,0 +1,26 @@
+{% block content %}
+<script>
+    checkAndAlertAdBlockerInstalled();
+    function checkAndAlertAdBlockerInstalled() {
+        const adDiv = document.createElement("div");
+        adDiv.classList.add('ad-box');
+        adDiv.setAttribute('id', 'ad-box');
+        adDiv.setAttribute('style', 'position:fixed;top:0;left:0;');
+        adDiv.textContent = ' ';
+        document.body.appendChild(adDiv);
+        setTimeout(function () {
+            var adBoxEl = document.querySelector("#ad-box");
+            var hasAdBlock = window.getComputedStyle(adBoxEl)?.display === "none";
+            if (hasAdBlock) {
+                if (!$('#notificationContainer').length) {
+                    $('#root').prepend('<div id="notificationContainer"></div>')
+                }
+                var UI = require('piwik/UI');
+                var notification = new UI.Notification();
+                notification.show(_pk_translate('HeatmapSessionRecording_AdBlockerDetected',["{{ type }}"]),{context: 'warning',id:'HeatmapAdBlocker'});
+            }
+            document.getElementById("ad-box").remove();
+        }, 2000)
+    }
+</script>
+{% endblock %}

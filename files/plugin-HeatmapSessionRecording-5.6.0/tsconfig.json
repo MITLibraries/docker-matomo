@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "typeRoots": [
+      "../../node_modules/@types",
+      "../../plugins/CoreVue/types/index.d.ts",
+      "./node_modules/@types"
+    ],
+    "types": [
+      "jquery",
+      "heatmap.js"
+    ]
+  }
+}

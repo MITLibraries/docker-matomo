@@ -1,0 +1,31 @@
+{
+  "name": "SearchEngineKeywordsPerformance",
+  "version": "5.2.1",
+  "description": "Discover which search keywords drive traffic, engagement, and conversions. Get the keyword insights behind \"Keyword not defined\" with data from Google Search Console, Bing Webmaster Tools, Yandex Webmaster, and search engine referrers.",
+  "theme": false,
+  "require": {
+    "matomo": ">=5.0.0-rc5,<6.0.0-b1"
+  },
+  "authors": [
+    {
+      "name": "InnoCraft",
+      "email": "contact@innocraft.com",
+      "homepage": "https://www.innocraft.com"
+    }
+  ],
+  "price": {
+    "base": 154
+  },
+  "homepage": "https://plugins.matomo.org/SearchEngineKeywordsPerformance",
+  "license": "InnoCraft EULA",
+  "keywords": [
+    "Keyword",
+    "Crawling",
+    "Search",
+    "Google",
+    "Bing",
+    "Yahoo",
+    "Yandex",
+    "SEO"
+  ]
+}
