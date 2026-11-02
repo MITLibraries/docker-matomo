@@ -1,0 +1,59 @@
+{% extends 'layout.twig' %}
+
+{% set title=('HeatmapSessionRecording_ReplayX'|translate('HeatmapSessionRecording_SessionRecording'|translate)) %}
+
+{% block root %}
+    {% include '@HeatmapSessionRecording/_detectAdBlocker.twig' with {type: 'Session recordings'} %}
+    <style type="text/css">
+        #root {
+            margin: 0 !important;
+        }
+    </style>
+    <div class="sessionRecording">
+        {% set sessionRecordingJsonFlags = constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP') b-or constant('JSON_HEX_APOS') b-or constant('JSON_HEX_QUOT') %}
+        <script type="text/javascript">
+            window.sessionRecordingData = {{ {
+                events: recording.events,
+                viewport_w_px: recording.viewport_w_px,
+                viewport_h_px: recording.viewport_h_px,
+                pageviews: recording.pageviews,
+                idLogHsr: idLogHsr,
+                idSiteHsr: idSiteHsr,
+                idSite: idSite,
+                duration: recording.time_on_page,
+                url: recording.url,
+                server_time_pretty: recording.server_time_pretty,
+                time_on_page_pretty: recording.time_on_page_pretty,
+                idvisit: recording.idvisit,
+                idvisitor: recording.idvisitor,
+                numPageviews: recording.numPageviews,
+                currentPage: currentPage,
+                location_name: recording.location_name,
+                location_logo: recording.location_logo,
+                device_name: recording.device_name,
+                device_logo: recording.device_logo,
+                os_name: recording.os_name,
+                os_logo: recording.os_logo,
+                browser_name: recording.browser_name,
+                browser_logo: recording.browser_logo,
+                visitorProfileEnabled: visitorProfileEnabled
+            }|json_encode(sessionRecordingJsonFlags)|raw }};
+        </script>
+
+        <div vue-entry="HeatmapSessionRecording.SessionRecordingVis"
+             scroll-accuracy="{{ scrollAccuracy }}"
+             offset-accuracy="{{ offsetAccuracy }}"
+             replay-speed="{{ replaySpeed }}"
+             skip-pauses-enabled="{% if skipPausesEnabled %}true{% else %}false{% endif %}"
+             auto-play-enabled="{% if autoPlayEnabled %}true{% else %}false{% endif %}">
+        </div>
+
+        <div
+            vue-entry="HeatmapSessionRecording.ListOfPageviews"
+            pageviews="{{ recording.pageviews|default([])|json_encode }}"
+            id-log-hsr="{{ idLogHsr|default(null)|json_encode }}"
+        >
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+includes:
+    - phpstan.neon
+
+parameters:
+    tmpDir: /tmp/phpstan/CustomReports/min-matomo
+    ignoreErrors:
+        # EntityDuplicatorHelper arrived in Matomo 5.4.0, alongside DuplicateRequestResponse.
+        # duplicateCustomReport() throws before reaching this call when the latter is missing.
+        -
+            identifier: class.notFound
+            path: API.php
+            count: 1

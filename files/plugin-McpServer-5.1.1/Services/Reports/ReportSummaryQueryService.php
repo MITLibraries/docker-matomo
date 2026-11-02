@@ -1,0 +1,143 @@
+<?php
+
+/**
+ * Matomo - free/libre analytics platform
+ *
+ * @link    https://matomo.org
+ * @license https://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
+ */
+
+declare(strict_types=1);
+
+namespace Piwik\Plugins\McpServer\Services\Reports;
+
+use Piwik\API\Request;
+use Piwik\Plugins\McpServer\Contracts\McpToolCallException;
+use Piwik\Plugins\McpServer\Contracts\Ports\Reports\ReportSummaryQueryServiceInterface;
+use Piwik\Plugins\McpServer\Contracts\Records\Reports\ReportSummaryRecord;
+use Piwik\Plugins\McpServer\Support\Errors\NoAccessLikeErrorDetector;
+use Piwik\Plugins\McpServer\Support\Errors\ToolErrorMapper;
+use Piwik\Plugins\McpServer\Support\Normalization\ToolDataNormalizer;
+
+final class ReportSummaryQueryService implements ReportSummaryQueryServiceInterface
+{
+    /**
+     * @return array<int, ReportSummaryRecord>
+     */
+    public function getReportSummariesForSite(int $idSite): array
+    {
+        try {
+            $reports = Request::processRequest(
+                'API.getReportMetadata',
+                [
+                    'idSite' => (string) $idSite,
+                    'period' => false,
+                    'date' => false,
+                    'hideMetricsDoc' => true,
+                    'showSubtableReports' => true,
+                ],
+                [],
+            );
+        } catch (\Throwable $e) {
+            // Keep list behavior aligned with other list tools: no view access yields no rows.
+            if (
+                ToolErrorMapper::shouldReturnEmptyListFor(
+                    $e,
+                    static fn(\Throwable $error): bool => NoAccessLikeErrorDetector::isDetected($error)
+                )
+            ) {
+                return [];
+            }
+
+            throw new McpToolCallException('Report retrieval failed.');
+        }
+
+        return $this->normalizeReportSummaryRows(
+            $reports,
+            'Report list data is invalid.',
+            'Report list item',
+        );
+    }
+
+    /**
+     * Public for testability and to share normalization contract across MCP tools.
+     *
+     * @param array<string, mixed> $report
+     */
+    public function normalizeReportSummaryData(array $report, string $context): ReportSummaryRecord
+    {
+        $parametersValue = $report['parameters'] ?? [];
+        if ($parametersValue !== [] && !is_array($parametersValue)) {
+            throw new McpToolCallException("{$context} is invalid (field 'parameters').");
+        }
+        $parameters = ToolDataNormalizer::requireStringKeyedArray(
+            $parametersValue,
+            "{$context} is invalid (field 'parameters')",
+        );
+
+        return new ReportSummaryRecord(
+            uniqueId: ToolDataNormalizer::requireStringField($report, 'uniqueId', $context),
+            module: ToolDataNormalizer::requireStringField($report, 'module', $context),
+            action: ToolDataNormalizer::requireStringField($report, 'action', $context),
+            name: ToolDataNormalizer::requireStringField($report, 'name', $context),
+            category: ToolDataNormalizer::requireStringField($report, 'category', $context),
+            parameters: $parameters,
+            isSubtableReport: $this->isSubtableReport($report),
+            actionToLoadSubTables: $this->normalizeOptionalStringField($report, 'actionToLoadSubTables', $context),
+        );
+    }
+
+    /**
+     * Public for testability and to keep top-level payload-shape validation centralized.
+     *
+     * @return array<int, ReportSummaryRecord>
+     */
+    public function normalizeReportSummaryRows(
+        mixed $reports,
+        string $invalidDataMessage,
+        string $context,
+    ): array {
+        if (!is_array($reports)) {
+            throw new McpToolCallException($invalidDataMessage);
+        }
+
+        $result = [];
+        foreach ($reports as $report) {
+            $reportData = ToolDataNormalizer::requireStringKeyedArray($report, $invalidDataMessage);
+            $result[] = $this->normalizeReportSummaryData($reportData, $context);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array<string, mixed> $report
+     */
+    private function isSubtableReport(array $report): bool
+    {
+        $primary = $report['isSubtableReport'] ?? null;
+        if ($primary === true || $primary === 1 || $primary === '1') {
+            return true;
+        }
+
+        $alias = $report['isSubtableReports'] ?? null;
+        return $alias === true || $alias === 1 || $alias === '1';
+    }
+
+    /**
+     * @param array<string, mixed> $report
+     */
+    private function normalizeOptionalStringField(array $report, string $field, string $context): ?string
+    {
+        $value = $report[$field] ?? null;
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        if (!is_string($value)) {
+            throw new McpToolCallException("{$context} is invalid (field '{$field}').");
+        }
+
+        return $value;
+    }
+}

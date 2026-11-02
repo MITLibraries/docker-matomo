@@ -1,0 +1,160 @@
+#recordingPlayer {
+  display: block;
+  pointer-events: none !important;
+  background: white;
+}
+
+.scrollHeatmapLeaf {
+  position:absolute;
+  z-index: 10;
+  opacity: 0.4;
+}
+#listOfPageviews {
+  table .inactive {
+    cursor: pointer;
+  }
+}
+.sessionRecording {
+  padding: 16px;
+  font-size: 14px;
+}
+
+.visitorLogReplaySession {
+  margin-top: 10px;
+  padding-bottom: 5px;
+  display: block;
+  width: auto!important;
+  &:hover {
+    color: @theme-color-brand !important;
+  }
+
+  .visitor-profile & {
+    display: none;
+  }
+}
+
+.visitorLogIconReplaySession {
+  display: block;
+  float: left;
+  font-size: 18px;
+  margin: 4px 10px 0 0;
+
+  .dataTableVizVisitorLog &, .visitor-profile-header & {
+    display: none;
+  }
+
+  &:hover {
+    text-decoration: none;
+    color: @theme-color-brand !important;
+  }
+}
+
+@hsrPlayRecordingWidth: 30px;
+
+[data-report="HeatmapSessionRecording.getRecordedSessions"] {
+  .dataTableRowActions {
+
+    .actionHsrVisitorProfile {
+      padding-right: 1rem;
+    }
+
+    .icon-visitor-profile {
+      font-size: 21px !important;
+    }
+  }
+
+  table.dataTable td.label span.label {
+    max-width: calc(~"100% - @{hsrPlayRecordingWidth}");
+  }
+
+  table.dataTable td.label > a.hsrPlayRecording {
+    display: inline-block;
+    width: auto;
+    max-width: none;
+    vertical-align: bottom;
+    text-decoration: none;
+    color: @theme-color-brand !important;
+    opacity: 0.75;
+    font-size: 15px;
+    height: 18px;
+    line-height: 18px;
+    padding: 0 6px 0 0;
+    margin-right: 6px;
+
+    &:hover,
+    &:focus {
+      opacity: 1;
+      text-decoration: none;
+    }
+
+    // Clears Morpheus' global `a:focus { outline: thin dotted }`, which fires on mouse click too.
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 1px solid @theme-color-brand;
+      outline-offset: 1px;
+    }
+
+    @media print {
+      display: none;
+    }
+  }
+
+  table.subDataTable tr .label.column {
+    width: 400px;
+  }
+
+  .countryFlag {
+    border: 1px solid #d3d3d3;
+  }
+}
+
+.hsrLoadingOuter {
+  position: absolute;
+  z-index: 2;
+
+  .loadingUnderlay {
+    background: #000;
+    width:100%;
+    height:100%;
+    position: relative;
+    opacity: 0.6;
+  }
+
+  .loadingInner {
+    margin: 0 auto;
+    font-size: 28px;
+    color: white;
+    text-align:center;
+    top: 50px;
+    position: absolute;
+    width: 100%;
+  }
+
+  .loadingContent {
+    margin: 0 auto;
+  }
+}
+
+.heatmapVis .btn-flat {
+  background-color: @theme-color-brand;
+  opacity: 0.6;
+  color: #fff;
+  border: 0;
+  box-shadow: 0 2px 3px 0 rgba(0,0,0,0.16), 0 0 3px 0 rgba(0,0,0,0.12);
+
+  &:hover {
+    opacity: 1 !important;
+  }
+
+  img {
+    filter: invert(1);
+  }
+}
+
+.heatmapVis .visActive {
+  background-color: @theme-color-brand !important;
+  opacity: 1 !important;
+}

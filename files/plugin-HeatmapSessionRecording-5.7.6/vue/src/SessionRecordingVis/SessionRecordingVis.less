@@ -1,0 +1,502 @@
+// @theme-color-* variables are auto-prepended to every plugin stylesheet and compile to runtime
+// `var(--theme-color-*)` references. Never pass one to a LESS colour function (fade / darken /
+// lighten / mix): it aborts compilation of Matomo's ENTIRE merged stylesheet and every page loses
+// its CSS. Use color-mix(in srgb, ...), a literal rgba(), or one of the @_marker* literals below.
+
+.sessionRecordingVis {
+    // One palette for both themes: every value below clears 3:1 against the dark card, so the
+    // per-theme overrides these used to carry are no longer needed.
+    @_markerClick: #f5b700;
+    @_markerMove: #ff7a1a;
+    @_markerScroll: #2f80ed;
+    @_markerResize: #e84393;
+    @_markerForm: #27ae60;
+    @_markerMutation: #7b61ff;
+
+    @_timelineTrack: rgba(235, 235, 235, .86);
+    @_timelineTrackDark: #3a3f45;
+    @_timelineFill: rgba(0, 180, 190, .45);
+
+    @_brandStrong: #009aa3;
+
+    // These three theme variables only exist from Matomo 5.6 / 5.11 / 5.12, but plugin.json still
+    // declares a 5.0 floor, and an undefined LESS variable aborts the whole merged stylesheet.
+    // Resolving them as custom properties keeps the exact colour where core defines it and falls
+    // back to the value core used before it landed.
+    @_colorBorderAlt: ~"var(--theme-color-border-alternative, @{theme-color-border})";
+    @_colorNewBrand: ~"var(--theme-color-new-brand, #00b4be)";
+    @_colorFocusRing: ~"var(--theme-color-focus-ring, #0969da)";
+
+    // Core's .inDarkMode() only exists from Matomo 5.10; this is its expansion, which simply never
+    // matches on older versions.
+    .hsrInDarkMode(@rules) {
+        [data-theme-mode="dark"]:root & {
+            @rules();
+        }
+
+        [data-theme-mode="auto"]:root & {
+            @media (prefers-color-scheme: dark) {
+                @rules();
+            }
+        }
+    }
+
+    .sessionRecordingVisButtonReset() {
+        // Not global in Matomo: without this every bordered control here is 2px over its stated
+        // size.
+        box-sizing: border-box;
+        display: inline-flex;
+        align-items: safe center;
+        justify-content: safe center;
+        flex: none;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: none;
+        color: @theme-color-text-light;
+        font-family: inherit;
+        line-height: 1;
+        cursor: pointer;
+
+        // Morpheus sets a global `:focus { outline: thin dotted }` (general/_default.less), which
+        // fires on mouse click too. Drop it so only the keyboard ring below shows; the two rules
+        // are equal specificity, so :focus-visible must stay second.
+        &:focus {
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid @_colorFocusRing;
+            outline-offset: 2px;
+        }
+
+        &:disabled {
+            opacity: .35;
+            pointer-events: none;
+        }
+    }
+
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: 14px;
+
+    .sessionRecordingVis__main {
+        display: flex;
+        flex: auto;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 16px;
+        border: 1px solid @_colorBorderAlt;
+        border-radius: 8px;
+        background: @theme-color-background-contrast;
+    }
+
+    .sessionRecordingVis__meta {
+        flex: none;
+        flex-basis: 300px;
+    }
+
+    .sessionRecordingVis__controls {
+        position: relative;
+    }
+
+    .sessionRecordingVis__transport {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: safe center;
+        justify-content: safe center;
+        gap: 8px 16px;
+    }
+
+    // The two groups wrap against each other rather than the row wrapping mid-cluster, which would
+    // strand a lone control on its own line and split the negative-margin pairs below.
+    .sessionRecordingVis__transportPlayback {
+        display: flex;
+        flex: none;
+        align-items: safe center;
+        gap: 8px;
+    }
+
+    .sessionRecordingVis__transportOptions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: safe center;
+        justify-content: safe center;
+        gap: 8px;
+    }
+
+    .sessionRecordingVis__progress {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: safe center;
+        gap: 6px 16px;
+        margin: 8px 0;
+    }
+
+    .sessionRecordingVis__action {
+        .sessionRecordingVisButtonReset();
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        // Inline SVG rather than the icon font: every icon-* glyph has its own optical centre
+        // inside the em box, so five different glyphs cannot be aligned on one axis.
+        color: @theme-color-text-lighter;
+
+        &:hover {
+            color: @theme-color-link;
+            background-color: @theme-color-background-base;
+        }
+    }
+
+    // Must stay directly after .sessionRecordingVis__action: the ring overrides that rule's
+    // `border: 0` (via .sessionRecordingVisButtonReset) and its :hover at equal specificity, so
+    // source order decides.
+    .sessionRecordingVis__action--primary {
+        width: 40px;
+        height: 40px;
+        border: 1.5px solid @_colorBorderAlt;
+        border-radius: 50%;
+        background: none;
+        color: @theme-color-text-lighter;
+
+        &:hover {
+            border-color: @_colorNewBrand;
+            background-color: color-mix(in srgb, @_colorNewBrand 14%, transparent);
+            color: @_brandStrong;
+
+            .hsrInDarkMode({
+                color: @_colorNewBrand;
+            });
+        }
+    }
+
+    // Cancel .sessionRecordingVis__transportPlayback's gap on the side facing the rewind /
+    // fast-forward pair only, so the play button keeps the full 8px on both of its sides.
+    .sessionRecordingVis__action--skipPrevious {
+        margin-right: -8px;
+    }
+
+    .sessionRecordingVis__action--skipNext {
+        margin-left: -8px;
+    }
+
+    .sessionRecordingVis__actionIcon {
+        display: block;
+        width: 17px;
+        height: 17px;
+    }
+
+    .sessionRecordingVis__actionIcon--small {
+        width: 16px;
+        height: 16px;
+    }
+
+    .sessionRecordingVis__duration {
+        flex: none;
+        margin: 0 4px;
+        color: @theme-color-text;
+        font-size: 14px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    .sessionRecordingVis__toggle {
+        .sessionRecordingVisButtonReset();
+        gap: 7px;
+        height: 30px;
+        padding: 0 11px;
+        border: 1px solid @_colorBorderAlt;
+        border-radius: 999px;
+        background-color: @theme-color-background-contrast;
+        font-size: 12px;
+
+        &:hover {
+            color: @theme-color-text;
+            background-color: @theme-color-background-base;
+        }
+    }
+
+    // Declared after the :hover above so an active toggle keeps its teal border while hovered.
+    .sessionRecordingVis__toggle--active {
+        color: @theme-color-text;
+        border-color: color-mix(in srgb, @_colorNewBrand 40%, transparent);
+    }
+
+    .sessionRecordingVis__toggleSwitch {
+        position: relative;
+        flex: none;
+        width: 26px;
+        height: 15px;
+        border-radius: 999px;
+        background-color: @_colorBorderAlt;
+        transition: background-color .15s;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background-color: @theme-color-background-contrast;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+            transition: left .15s;
+        }
+    }
+
+    .sessionRecordingVis__toggleSwitch--on {
+        background-color: @_colorNewBrand;
+
+        &::after {
+            left: 13px;
+        }
+    }
+
+    .sessionRecordingVis__speed {
+        position: relative;
+        display: inline-flex;
+        flex: none;
+    }
+
+    .sessionRecordingVis__speedButton {
+        .sessionRecordingVisButtonReset();
+        gap: 5px;
+        min-width: 52px;
+        height: 30px;
+        padding: 0 10px;
+        border: 1px solid @_colorBorderAlt;
+        border-radius: 999px;
+        background-color: @theme-color-background-contrast;
+        font-size: 12px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+
+        &:hover {
+            color: @theme-color-text;
+            background-color: @theme-color-background-base;
+        }
+    }
+
+    .sessionRecordingVis__speedChevron {
+        display: block;
+        flex: none;
+        width: 10px;
+        height: 10px;
+        transition: transform .15s ease;
+    }
+
+    .sessionRecordingVis__speedChevron--expanded {
+        transform: rotate(180deg);
+    }
+
+    .sessionRecordingVis__speedMenu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 1010;
+        min-width: 100%;
+        margin: 6px 0 0;
+        padding: 4px;
+        border: 1px solid @_colorBorderAlt;
+        border-radius: 8px;
+        background: @theme-color-background-contrast;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, .12);
+        list-style: none;
+    }
+
+    .sessionRecordingVis__speedMenu--expanded {
+        display: block;
+    }
+
+    .sessionRecordingVis__speedItem {
+        margin: 0;
+    }
+
+    .sessionRecordingVis__speedOption {
+        .sessionRecordingVisButtonReset();
+        justify-content: flex-start;
+        width: 100%;
+        height: 26px;
+        padding: 0 8px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+
+        &:hover {
+            color: @theme-color-text;
+            background-color: @theme-color-background-base;
+        }
+    }
+
+    .sessionRecordingVis__speedOption--active {
+        color: @_brandStrong;
+        font-weight: 600;
+
+        .hsrInDarkMode({
+            color: @_colorNewBrand;
+        });
+    }
+
+    .sessionRecordingVis__timeline {
+        flex: auto;
+        flex-basis: 320px;
+        min-width: 180px;
+        position: relative;
+        padding: 8px 0;
+        cursor: pointer;
+    }
+
+    .sessionRecordingVis__timelineTrack {
+        position: relative;
+        height: 6px;
+        // Fully rounded rather than half the height, so the ends stay correct at any thickness.
+        border-radius: 999px;
+        background-color: @_timelineTrack;
+
+        .hsrInDarkMode({
+            background-color: @_timelineTrackDark;
+        });
+    }
+
+    .sessionRecordingVis__timelineFill {
+        height: 100%;
+        border-radius: 999px;
+        // Not @theme-color-base-series: that is the chart series red (#ee3024), which reads as an
+        // error state on a progress bar.
+        background-color: @_timelineFill;
+    }
+
+    .sessionRecordingVis__marker {
+        position: absolute;
+        // Overhang the track top and bottom into .sessionRecordingVis__timeline's 8px padding, so
+        // a marker stays legible where the opaque teal fill sits behind it. top/bottom rather than
+        // a height, so the overhang stays 3px whatever the track height is.
+        top: -3px;
+        bottom: -3px;
+        width: 2px;
+        left: 0;
+    }
+
+    .sessionRecordingVis__legend {
+        display: flex;
+        flex: initial;
+        flex-wrap: wrap;
+        align-items: safe center;
+        gap: 4px 10px;
+        margin: 0 0 0 auto;
+        padding: 0;
+        list-style: none;
+    }
+
+    .sessionRecordingVis__legendItem {
+        display: flex;
+        align-items: safe center;
+        gap: 4px;
+        margin: 0;
+        font-size: 12px;
+    }
+
+    .sessionRecordingVis__swatch {
+        flex: none;
+        height: 8px;
+        width: 8px;
+        border-radius: 2px;
+    }
+
+    .sessionRecordingVis__marker--click,
+    .sessionRecordingVis__swatch--click {
+        background: @_markerClick;
+    }
+
+    .sessionRecordingVis__marker--move,
+    .sessionRecordingVis__swatch--move {
+        background: @_markerMove;
+    }
+
+    .sessionRecordingVis__marker--scroll,
+    .sessionRecordingVis__swatch--scroll {
+        background: @_markerScroll;
+    }
+
+    .sessionRecordingVis__marker--resize,
+    .sessionRecordingVis__swatch--resize {
+        background: @_markerResize;
+    }
+
+    .sessionRecordingVis__marker--form,
+    .sessionRecordingVis__swatch--form {
+        background: @_markerForm;
+    }
+
+    .sessionRecordingVis__marker--mutation,
+    .sessionRecordingVis__swatch--mutation {
+        background: @_markerMutation;
+    }
+
+    .sessionRecordingVis__stage {
+        // Not background-contrast: the stage now sits inside a card of that colour, and a scaled
+        // narrow recording needs a mat behind it rather than blending into the card.
+        background: @theme-color-background-base;
+        border: 1px solid @_colorBorderAlt;
+        border-radius: 8px;
+        box-sizing: border-box;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .sessionRecordingVis__stageInner {
+        height: 100%;
+        width: 100%;
+    }
+
+    .sessionRecordingVis__frame {
+        background-color: #fff;
+
+        .hsrInDarkMode({
+            background-color: #000;
+        });
+    }
+
+    // Nest element for the plugin-wide .hsrLoadingOuter overlay, which is inline-sized by whoever
+    // embeds it (see HeatmapVis.vue).
+    .sessionRecordingVis__loading {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sessionRecordingVis {
+        .sessionRecordingVis__toggleSwitch {
+            transition: none;
+
+            &::after {
+                transition: none;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .sessionRecordingVis {
+        flex-wrap: wrap;
+
+        .sessionRecordingVis__main {
+            flex: auto;
+            flex-basis: 100%;
+        }
+
+        .sessionRecordingVis__meta {
+            flex: auto;
+            flex-basis: 100%;
+        }
+    }
+}

@@ -1,0 +1,27 @@
+.dragHandle {
+  padding-right: 15px;
+  color: @theme-color-text-light;
+  cursor: grab;
+
+  .dragHandle__icon {
+    display: block;
+    fill: currentColor;
+  }
+
+  // the surrounding list adds the hook while it does not allow dragging
+  .__dragHandle-disabledList & {
+    cursor: default;
+  }
+
+  // hidden while the surrounding list is view-only; the page toggles the hook
+  .__dragHandle-viewOnly & {
+    display: none;
+  }
+}
+
+// tighter gap for handles sitting beside form fields
+.dragHandle--tightGap {
+  box-sizing: content-box;
+  width: 10px;
+  padding-right: 10px;
+}

@@ -1,0 +1,111 @@
+.manageReports {
+    .reportSearchFilter {
+        .form-group {
+            .theWidgetContent & {
+                margin-top: 0 !important;
+            }
+        }
+        .input-field {
+            margin-left: -0.75em !important;
+            margin-top: 0;
+
+            .theWidgetContent & {
+                margin-left: 0 !important;
+            }
+        }
+    }
+    .info {
+        color: @color-silver;
+    }
+
+    .icon-info2,
+    .icon-locked {
+        color: @color-silver;
+        cursor: help;
+    }
+
+    p, pre {
+        max-width: 900px;
+    }
+
+    th.action, td.action {
+        width: 250px;
+
+        a {
+            color: #000;
+            margin-top: -16px;
+        }
+    }
+
+    th.action.duplicate-available, td.action.duplicate-available {
+        width: 280px;
+    }
+
+    .index {
+        width: 60px;
+    }
+
+    .manageReports__createdBy,
+    .manageReports__updatedBy {
+        width: 110px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .manageReports__createdDate,
+    .manageReports__lastUpdated {
+        width: 110px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    th.manageReports__createdBy,
+    th.manageReports__updatedBy,
+    th.manageReports__createdDate,
+    th.manageReports__lastUpdated {
+        // headers wrap onto a second line; left unwrapped their text sets the column minimum and
+        // the four columns together push the table past the content area
+        white-space: normal;
+    }
+
+    td.manageReports__createdBy,
+    td.manageReports__updatedBy {
+        // a login is a single unbroken token and can be up to 100 characters, so it has to be
+        // allowed to break mid-word; without this it would set the column minimum and squeeze the
+        // name and description columns
+        overflow-wrap: anywhere;
+    }
+
+    .manageReports__unknownUserHelp {
+        color: inherit;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        .icon-help {
+            color: @color-silver;
+            margin-left: 4px;
+            // inline-block stops the link's hover underline propagating onto the glyph;
+            // text-decoration: none on a child cannot undo it
+            display: inline-block;
+        }
+    }
+
+    td.manageReports__createdDate,
+    td.manageReports__lastUpdated {
+        white-space: nowrap;
+    }
+
+    td {
+        .icon-ok {
+            color: #43a047;
+        }
+    }
+}
+
+.customReportsHigherDimensions table.dataTable td {
+    width: calc(100% - 4rem) !important;
+    max-width: 160px !important;
+}
