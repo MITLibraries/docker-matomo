@@ -103,6 +103,8 @@ Plugins[] = "Tour"
 Plugins[] = "PagePerformance"
 Plugins[] = "CustomDimensions"
 Plugins[] = "FeatureFlags"
+Plugins[] = "AIAgents"
+Plugins[] = "BotTracking"
 Plugins[] = "MobileAppMeasurable"
 Plugins[] = "TagManager"
 Plugins[] = "CustomReports"
@@ -111,6 +113,7 @@ Plugins[] = "EnvironmentVariables"
 Plugins[] = "HeatmapSessionRecording"
 Plugins[] = "SearchEngineKeywordsPerformance"
 Plugins[] = "UsersFlow"
+Plugins[] = "McpServer"
 
 
 [PluginsInstalled]
@@ -188,6 +191,9 @@ PluginsInstalled[] = "WebsiteMeasurable"
 PluginsInstalled[] = "Widgetize"
 PluginsInstalled[] = "SearchEngineKeywordsPerformance"
 PluginsInstalled[] = "CustomReports"
+PluginsInstalled[] = "BotTracking"
+PluginsInstalled[] = "AIAgents"
+PluginsInstalled[] = "McpServer"
 
 
 [HeatmapSessionRecording]
