@@ -1,7 +1,0 @@
-{
-  "dependsOn": [
-    "CoreHome",
-    "CorePluginsAdmin",
-    "SegmentEditor"
-  ]
-}
