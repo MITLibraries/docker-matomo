@@ -1,0 +1,70 @@
+@_tip-bg: @theme-color-background-contrast;
+@_tip-border: @theme-color-border;
+// side length of the square that is rotated 45° to form the arrow
+@_tip-arrow: 11px;
+
+.d3-tip {
+  line-height: 1.5;
+  font-weight: normal;
+  padding: 12px 14px;
+  background: @_tip-bg;
+  color: @theme-color-text;
+  border: 1px solid @_tip-border;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+  // without this the tooltip slips behind positioned page elements / dropdowns;
+  // matches the context menu's z-index in Visualization.less
+  z-index: 1500;
+  pointer-events: none;
+}
+
+/* The arrow is a single 45°-rotated square: its background fuses with the
+   bubble and only the two outward-facing edges carry the border. Using one
+   element (instead of two stacked triangles) means the outline is always
+   exactly 1px and can never round to a different pixel than the fill. */
+.d3-tip:after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  width: @_tip-arrow;
+  height: @_tip-arrow;
+  background: @_tip-bg;
+  border: 1px solid @_tip-border;
+  pointer-events: none;
+}
+
+// how far the arrow's centre sits past the bubble edge, so enough of it clears
+// the border instead of hiding inside the bubble
+@_tip-arrow-offset: 1px;
+
+/* Northward tooltips (bubble above target, arrow points down) */
+.d3-tip.n:after {
+  bottom: -@_tip-arrow-offset;
+  left: 50%;
+  transform: translate(-50%, 50%) rotate(45deg);
+  border-color: transparent @_tip-border @_tip-border transparent;
+}
+
+/* Eastward tooltips (bubble right of target, arrow points left) */
+.d3-tip.e:after {
+  top: 50%;
+  left: -@_tip-arrow-offset;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-color: transparent transparent @_tip-border @_tip-border;
+}
+
+/* Southward tooltips (bubble below target, arrow points up) */
+.d3-tip.s:after {
+  top: -@_tip-arrow-offset;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-color: @_tip-border transparent transparent @_tip-border;
+}
+
+/* Westward tooltips (bubble left of target, arrow points right) */
+.d3-tip.w:after {
+  top: 50%;
+  right: -@_tip-arrow-offset;
+  transform: translate(50%, -50%) rotate(45deg);
+  border-color: @_tip-border @_tip-border transparent transparent;
+}

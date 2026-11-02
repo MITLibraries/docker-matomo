@@ -54,11 +54,14 @@ The `[Plugins]` section tells Matomo which plugins to enable on installation. To
 Any time plugins are installed/removed, it is imperative to capture a backup of the `config.ini.php` file (via the EFS partition) before launching the updated container and then compare it to the `config.ini.php` file after verifying that the plugin is activated. This is one of the few situations where the Matomo application might update/overwrite the `config.ini.php` file.
 
 #### Current Plugins
-* [Custom Reports](https://plugins.matomo.org/CustomReports) version 5.4.10
+
+* [Custom Reports](https://plugins.matomo.org/CustomReports) version 5.6.3
 * [Custom Variables](https://plugins.matomo.org/CustomVariables) version 5.0.6 Note: This is the last version of this plugin as it is no longer under development.  Future updates should use [Custom Dimensions](https://matomo.org/docs/custom-dimensions/)
-* [Heatmap & Session Recording](https://plugins.matomo.org/HeatmapSessionRecording) version 5.3.5
-* [Search Engine Keywords](https://plugins.matomo.org/SearchEngineKeywordsPerformance) version 5.0.29
-* [Users Flow](https://plugins.matomo.org/UsersFlow) version 5.0.9
+* [Environment Variables](https://plugins.matomo.org/EnvironmentVariables) version. 5.0.4
+* [Heatmap & Session Recording](https://plugins.matomo.org/HeatmapSessionRecording) version 5.7.6
+* [MCP Server](https://plugins.matomo.org/McpServer) version 5.1.1
+* [Search Engine Keywords](https://plugins.matomo.org/SearchEngineKeywordsPerformance) version 5.2.7
+* [Users Flow](https://plugins.matomo.org/UsersFlow) version 5.1.3
 
 #### [Mail]
 
@@ -104,7 +107,7 @@ See the official [Recover from lost 2FA](https://matomo.org/faq/how-to/faq_27248
 
 * Owner: See [CODEOWNERS](./.github/CODEOWNERS)
 * Team: See [CODEOWNERS](./.github/CODEOWNERS)
-* Last Maintenance: 2026-06
+* Last Maintenance: 2026-11
 * External Documentation:
   * [MIT Libraries dev docs](https://mitlibraries.github.io/guides/misc/matomo.html) - includes information about setting up a website for tracking in Matomo.
   * [Matomo help center](https://matomo.org/help/) - offical Matomo docs. Includes user guide, developer guide, FAQ, and community support forum.

@@ -1,0 +1,101 @@
+
+.editHsr {
+  .icon-help {
+    color: @theme-color-text-lighter;
+    cursor: help;
+    &:hover {
+      color: @theme-color-text;
+    }
+  }
+  .icon-minus,
+  .icon-plus {
+    cursor: pointer;
+  }
+  .icon-minus {
+    margin-left: 8px;
+  }
+
+  .matchPageRules > .row {
+    width: ~"calc(100% - 60px)";
+    margin: 0 !important;
+
+    > .col {
+      padding-left: 0;
+    }
+  }
+
+  .form-group {
+    margin-left: -.75rem;
+    margin-right: -.75rem;
+
+    &.hsrTargetTest {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  .matchPageRules {
+    margin-top: 1em;
+
+    hr {
+      margin-bottom: 3em;
+    }
+
+    .form-group {
+      margin: 0;
+    }
+    .input-field {
+      margin-top: 0.2em;
+
+      input, select{
+        width: 100% !important;
+      }
+    }
+  }
+
+  .targetingToggle {
+    // align with the field content, which Materialize insets by .75rem (.col padding)
+    margin: 0 0 1.25em;
+    padding-left: .75rem;
+
+    a {
+      color: @color-green-matomo;
+      cursor: pointer;
+    }
+  }
+
+  .advancedSettingsToggle {
+    padding: 1.75em 0 1.25em;
+
+    h3 {
+      margin: 0 0 .9em;
+      font-weight: 600;
+    }
+
+    p:last-child {
+      margin: 0;
+    }
+
+    a {
+      color: @color-green-matomo;
+    }
+  }
+
+  .heatmapAdvancedSection {
+    margin-bottom: 2.5em;
+
+    h3 {
+      margin-bottom: .25em;
+      font-weight: 600;
+    }
+
+    .sectionDescription {
+      color: @theme-color-text-lighter;
+      margin-bottom: 1.25em;
+    }
+  }
+
+  .heatmapAdvancedSection:last-of-type {
+    margin-bottom: 1em;
+  }
+}

@@ -1,0 +1,189 @@
+.editReport {
+  min-width: 1070px;
+
+  form > div {
+    .matomo-form-field {
+      margin-left: -.75rem;
+    }
+
+    > .form-group {
+      margin-left: -.75rem;
+    }
+  }
+
+  .icon-help {
+    color: #888;
+    cursor: help;
+    &:hover {
+      color: @theme-color-text;
+    }
+  }
+
+  .alertUnlocked,
+  .unlockAlert {
+    margin-top: -24px;
+  }
+
+  .icon-close {
+    cursor: pointer;
+  }
+
+  .metricsGroup,
+  .dimensionsGroup {
+    @_dragHandleWidth: 20px;
+
+    padding: 0 0.75rem;
+
+    .groupValueSelect {
+      min-width: 300px;
+      display: inline-block;
+    }
+
+    // selector look mirroring plugins/CoreHome/stylesheets/selector.less
+    // (@_selector-* values); styled here instead of in the core component so it
+    // works on every Matomo version the plugin supports
+    .expandableSelector {
+      .select-wrapper {
+        display: flex;
+        align-items: center;
+        align-items: safe center;
+        border: 1px solid @theme-color-border;
+        border-radius: 8px;
+        background: @theme-color-background-contrast;
+        cursor: pointer;
+
+        &:hover,
+        &:focus-within {
+          border-color: @theme-color-link;
+        }
+
+        // hide whichever chevron core renders: the legacy svg caret, or the
+        // chevron span once core ships the restyled select
+        .caret,
+        .expandableSelector__chevron {
+          display: none;
+        }
+
+        // icon-chevron-down glyph, drawn as a pseudo-element because the core
+        // component's markup cannot be changed from the plugin
+        &::after {
+          content: "\e908";
+          font-family: 'matomo';
+          padding-right: 16px;
+          color: @theme-color-text;
+        }
+
+        .select-dropdown {
+          flex: auto;
+          height: auto;
+          font-size: 14px;
+          line-height: 20px;
+          margin: 0;
+          padding: 8px 16px;
+          border: 0;
+          color: @theme-color-text;
+          cursor: pointer;
+        }
+      }
+
+      .expandableList {
+        margin-top: 8px;
+        border: 1px solid @theme-color-border;
+        border-radius: 8px;
+        box-shadow: 0 0 3px #A5B1CA4D, 0 10px 40px #A5B1CA4D;
+        overflow: hidden;
+
+
+        // expanded .inDarkMode() from core mixins.less: the mixin only exists
+        // from Matomo 5.11, this plugin still supports 5.0
+        [data-theme-mode="dark"]:root & {
+          box-shadow: 0 0 3px #00000080, 0 10px 40px #00000080;
+        }
+
+        [data-theme-mode="auto"]:root & {
+          @media (prefers-color-scheme: dark) {
+            box-shadow: 0 0 3px #00000080, 0 10px 40px #00000080;
+          }
+        }
+
+        .searchContainer {
+          border: 0;
+          border-bottom: 1px solid @theme-color-border;
+        }
+
+        ul.collection.firstLevel {
+          border: 0;
+          max-height: 50vh;
+          overflow-y: auto;
+        }
+      }
+
+      // placed after the .expandableList rule so the equal-specificity margin wins
+      .expandableSelector__list--above {
+        bottom: ~"calc(100% + 8px)";
+        margin-top: 0;
+      }
+    }
+
+
+    .selectedMetric,
+    .selectedDimension {
+      display: flex;
+      align-items: center;
+      align-items: safe center;
+      gap: 16px;
+    }
+
+    // keeps the empty select aligned with the draggable selects above it, which
+    // are indented by the drag handle
+    .hasDragHandleOffset {
+      margin-left: @_dragHandleWidth;
+    }
+
+    .icon-minus {
+      color: #666;
+      cursor: pointer;
+    }
+
+    label {
+      font-size: 0.8rem;
+    }
+    // the field lists' rhythm comes from the list items and the flex gap, not
+    // from the field's own margins and column padding
+    .groupValueSelect {
+      .form-group.row {
+        margin: 0;
+      }
+
+      .col {
+        padding: 0;
+      }
+    }
+
+    .fieldsListWrap {
+      margin-top: 16px;
+    }
+
+    .input-field {
+      margin: 0;
+    }
+  }
+
+  .expandableSelector {
+    label {
+      white-space: nowrap;
+      top: -0.8rem;
+    }
+  }
+
+  .customReportSearchMeasurablesField {
+    width: 50% !important;
+    display: inline-block;
+  }
+
+  .entityTable {
+    .selectedSiteRow td {
+      background: @color-silver-l98;
+    }
+  }
+}

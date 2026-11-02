@@ -1,0 +1,147 @@
+// @theme-color-* variables are auto-prepended to every plugin stylesheet and compile to runtime
+// `var(--theme-color-*)` references. Never pass one to a LESS colour function (fade / darken /
+// lighten / mix): it aborts compilation of Matomo's ENTIRE merged stylesheet and every page loses
+// its CSS. Use color-mix(in srgb, ...) or a literal rgba() instead.
+
+.recordingMetadata {
+    // These two theme variables only exist from Matomo 5.6 / 5.11, but plugin.json still declares a
+    // 5.0 floor, and an undefined LESS variable aborts the whole merged stylesheet. Resolving them
+    // as custom properties keeps the exact colour where core defines it and falls back to the value
+    // core used before it landed.
+    @_colorBorderAlt: ~"var(--theme-color-border-alternative, @{theme-color-border})";
+    @_colorFocusRing: ~"var(--theme-color-focus-ring, #0969da)";
+
+    box-sizing: border-box;
+    padding: 16px;
+    border: 1px solid @_colorBorderAlt;
+    border-radius: 8px;
+    background: @theme-color-background-contrast;
+    font-size: 14px;
+
+    .recordingMetadata__title {
+        margin: 0 0 12px;
+        font-size: 15px;
+        font-weight: 600;
+        color: @theme-color-text;
+    }
+
+    .recordingMetadata__list {
+        display: grid;
+        // Cap the label column: `auto` sizes to the longest label and leaves the values with
+        // almost no room in a 300px panel.
+        grid-template-columns: minmax(0, 42%) minmax(0, 1fr);
+        gap: 8px 12px;
+        align-items: baseline;
+        margin: 0;
+    }
+
+    .recordingMetadata__label {
+        min-width: 0;
+        color: @theme-color-text-lighter;
+        font-size: 13px;
+    }
+
+    .recordingMetadata__value {
+        min-width: 0;
+        margin: 0;
+        text-align: right;
+        font-weight: 500;
+    }
+
+    .recordingMetadata__value--truncated {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .recordingMetadata__value--wrapped {
+        overflow-wrap: break-word;
+    }
+
+    .recordingMetadata__value--inline {
+        display: flex;
+        align-items: safe center;
+        justify-content: flex-end;
+        gap: 6px;
+    }
+
+    .recordingMetadata__logo {
+        height: 14px;
+        margin-right: 6px;
+        vertical-align: -2px;
+    }
+
+    .recordingMetadata__logo--framed {
+        height: 15px;
+        border: 1px solid @_colorBorderAlt;
+    }
+
+    .recordingMetadata__pageviews {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: none;
+        color: @theme-color-link;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+        text-align: right;
+        cursor: pointer;
+
+        // See the same pairing in SessionRecordingVis.less: clears Morpheus' global
+        // `:focus { outline: thin dotted }` so the ring is keyboard-only.
+        &:focus {
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid @_colorFocusRing;
+            outline-offset: 2px;
+        }
+    }
+
+    .recordingMetadata__visitorId {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .recordingMetadata__profileButton {
+        flex: none;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: none;
+        // Matomo's row-action icon convention (CoreHome/stylesheets/dataTable/_rowActions.less):
+        // brand colour dimmed at rest, full opacity on hover. Same treatment this plugin already
+        // gives icon-visitor-profile and .hsrPlayRecording in the recordings report.
+        color: @theme-color-brand;
+        opacity: .75;
+        font-size: 16px;
+        line-height: 1;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 1;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid @_colorFocusRing;
+            outline-offset: 2px;
+        }
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .recordingMetadata {
+        .recordingMetadata__list {
+            grid-template-columns: repeat(auto-fit, minmax(90px, auto) minmax(130px, 1fr));
+            column-gap: 16px;
+        }
+    }
+}

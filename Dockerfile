@@ -4,7 +4,7 @@ FROM matomo:5.14.2
 
 ## begin Free plugins
 # Add the EnvironmentVariables plugin
-COPY ./files/plugin-EnvironmentVariables-5.0.3/ /var/www/html/plugins/EnvironmentVariables
+COPY ./files/plugin-EnvironmentVariables-5.0.4/ /var/www/html/plugins/EnvironmentVariables
 
 # Add the CustomVariables plugin
 COPY ./files/plugin-CustomVariables-5.0.6/ /var/www/html/plugins/CustomVariables
@@ -12,16 +12,19 @@ COPY ./files/plugin-CustomVariables-5.0.6/ /var/www/html/plugins/CustomVariables
 
 ## begin Premium (e.g., paid) plugins linked to our license code
 # Add the CustomReports plugin
-COPY ./files/plugin-CustomReports-5.5.0/ /var/www/html/plugins/CustomReports
+COPY ./files/plugin-CustomReports-5.6.3/ /var/www/html/plugins/CustomReports
 
 # Add the HeatmapSessionRecording plugin
-COPY ./files/plugin-HeatmapSessionRecording-5.6.0/ /var/www/html/plugins/HeatmapSessionRecording
+COPY ./files/plugin-HeatmapSessionRecording-5.7.6/ /var/www/html/plugins/HeatmapSessionRecording
+
+# Add the McpServer plugin
+COPY ./files/plugin-McpServer-5.1.1/ /var/www/html/plugins/McpServer
 
 # Add the SearchEngineKeywordsPerformance plugin
-COPY ./files/plugin-SearchEngineKeywordsPerformance-5.2.1/ /var/www/html/plugins/SearchEngineKeywordsPerformance
+COPY ./files/plugin-SearchEngineKeywordsPerformance-5.2.7/ /var/www/html/plugins/SearchEngineKeywordsPerformance
 
 # Add the UsersFlow plugin
-COPY ./files/plugin-UsersFlow-5.1.1/ /var/www/html/plugins/UsersFlow
+COPY ./files/plugin-UsersFlow-5.1.3/ /var/www/html/plugins/UsersFlow
 ## end Premium plugins
 
 # Our custom configuration settings.
