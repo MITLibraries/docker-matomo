@@ -34,7 +34,7 @@ These instructions assume you are working in the **dev** environment.  Change to
    * (Infra members should have the "superuser" checkbox checked for their Matomo UI login; if not, please verify with UXWS)
    * This step is only necessary when a database update is required.
 1. SSH (via AWSCLI + Session Manager) to the container and run the upgrade on the CLI (see the [Troubleshooting](./HOWTO-miscellaneous.md) section for the AWS CLI connection command).
-   * The database update command is `php /var/www/html/console core:update`.
+   * The database update command is `su -s /bin/bash -c "/var/www/html/console core:update" www-data` (the `su` is necessary to ensure that the database update runs as the `www-data` user)
    * This step is only necessary when there is a required update to the table structure in Matomo listed in the release notes.
 1. Compare the out-of-band `/mnt/efs/backup/config/config.ini/php` to the updated `config/config.ini.php` for changes.
 1. Verify that there were no changes to the `config.ini.php` file that need to be captured back in this repo.

@@ -10,11 +10,11 @@ For our container-based deploy, this means
 
 1. connect to the running container
 1. ensure that a simple text editor is available in the container
-1. deactivate the TagManager plugin: `./console plugin:deactivate TagManager`
+1. deactivate the TagManager plugin: `su -s /bin/bash -c "/var/www/html/console plugin:deactivate TagManager" www-data`
 1. edit the config/config.ini.php file to remove the `PluginsInstalled[] = "TagManager"` line
-1. run the `core:update` command: `./console core:update` (nothing should happen)
-1. activate the TagManager plugin: `./console plugin:activate TagManager`
-1. run the `core:update` command again: `./console core:update` (nothing should happen)
+1. run the `core:update` command: `su -s /bin/bash -c "/var/www/html/console core:update" www-data` (nothing should happen)
+1. activate the TagManager plugin: `su -s /bin/bash -c "/var/www/html/console plugin:activate TagManager" www-data`
+1. run the `core:update` command again: `su -s /bin/bash -c "/var/www/html/console core:update" www-data` (nothing should happen)
 
 The appropriate updates to the database will now be in place.
 
