@@ -10,15 +10,15 @@ COPY ./files/plugin-EnvironmentVariables-5.0.4/ /var/www/html/plugins/Environmen
 COPY ./files/plugin-CustomVariables-5.0.6/ /var/www/html/plugins/CustomVariables
 ## end Free plugins
 
+# Add the McpServer plugin
+COPY ./files/plugin-McpServer-5.1.1/ /var/www/html/plugins/McpServer
+
 ## begin Premium (e.g., paid) plugins linked to our license code
 # Add the CustomReports plugin
 COPY ./files/plugin-CustomReports-5.6.3/ /var/www/html/plugins/CustomReports
 
 # Add the HeatmapSessionRecording plugin
 COPY ./files/plugin-HeatmapSessionRecording-5.7.6/ /var/www/html/plugins/HeatmapSessionRecording
-
-# Add the McpServer plugin
-COPY ./files/plugin-McpServer-5.1.1/ /var/www/html/plugins/McpServer
 
 # Add the SearchEngineKeywordsPerformance plugin
 COPY ./files/plugin-SearchEngineKeywordsPerformance-5.2.7/ /var/www/html/plugins/SearchEngineKeywordsPerformance
@@ -41,6 +41,10 @@ COPY --chmod=0644 ./files/post_premium_plugins_piwik.js /usr/src/matomo/piwik.js
 COPY --chmod=0644 --chown=root:root ./files/lang-htaccess /usr/src/matomo/lang/.htaccess
 COPY --chmod=0644 --chown=root:root ./files/config-htaccess /usr/src/matomo/config/.htaccess
 COPY --chmod=0644 --chown=root:root ./files/tmp-htaccess /usr/src/matomo/tmp/.htaccess
+
+# Address the PHP/Apache configuration issue for the MCP Server
+COPY ./files/apache-authorization.conf /etc/apache2/conf-available/authorization.conf
+RUN a2enconf authorization
 
 # Create mount point for EFS partition
 RUN mkdir -p /mnt/efs
