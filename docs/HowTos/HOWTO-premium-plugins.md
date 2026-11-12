@@ -38,7 +38,7 @@ Before installing the license key, the *Marketplace* plugin must be activated. T
 According to the support team at Matomo, the premium license key can be installed in two instances of Matomo, "stage" and "prod." So, we can do some initial validation of a license key in Dev1, but the key cannot remain installed in the Dev1 instance. The license key installation can either be done by a user with "superuser" privileges in the Matomo web UI or it can be done by a member of InfraEng who has ssh access to the running container task/service. The CLI command is
 
 ```bash
-./console marketplace:set-license-key --license-key=<license_key>
+su -s /bin/bash -c "/var/www/html/console marketplace:set-license-key --license-key=<license_key>" www-data
 ```
 
 This needs to be done once on each of the stage & prod instances of Matomo.
@@ -53,14 +53,12 @@ Second, update the [Dockerfile](../../Dockerfile) with a new `COPY` command to c
 
 In this phase, the files are installed in the container **but** no changes are made to the `config.ini.php` file. This will **not** activate the plugins, it will just make them visible in the UI.
 
-**Note**: It is possible to do this with the `/var/www/html/console` utility when logged in to the cli of the running conatiner. However, that method introduces potential file permission errors since the command is run as `root` and the content in the `/var/www/html` folder needs to be owned by `www-data`.
-
 #### 3. Activate the plugin
 
 Once the plugin files are installed in the container, it's time to activate the plugin. In the UI, it's just a matter of clicking the `Activate` link for the plugin. For the CLI, the command is
 
 ```bash
-./console plugin:activate [<plugin>...]
+su -s /bin/bash -c "/var/www/html/console plugin:activate [<plugin>...]" www-data
 ```
 
 This will change the `config/config.ini.php` file -- which is actually persisted on the EFS filesystem linked to the container. It is important to capture any changes that happen in this file so that we can back-fill this repository in case we need to redeploy in a DR scenario.

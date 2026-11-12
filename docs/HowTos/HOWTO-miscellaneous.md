@@ -48,7 +48,7 @@ aws ecs update-service --cluster $(aws ecs list-clusters --output text | grep ma
 If we ever need to reset the 2FA configuration for a user, this is the command to run on the CLI of the container
 
 ```bash
-./console twofactorauth:disable-2fa-for-user --login=yourlogin
+su -s /bin/bash -c "/var/www/html/console twofactorauth:disable-2fa-for-user --login=yourlogin" www-data
 ```
 
 See [FAQ_27248](https://matomo.org/faq/how-to/faq_27248/) for more details.

@@ -1,5 +1,0 @@
-includes:
-    - ../phpstan.neon
-parameters:
-    level: 9
-    tmpDir: /tmp/phpstan/CustomReports/created
